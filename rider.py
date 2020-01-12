@@ -37,6 +37,35 @@ class Rider:
         row.append(add_element(r1=252,g1=186,b1=3,bx=0,element="\u2598")+[-1])
         row.append(add_element(bx=0,element="\u259B")+[-1])
         self.rider.append(row)
+    def __init__(self):
+        self.gen_rider()
+        self._xpos_left = 4
+        self._ypos_top = int(rows)//2
+        self.art_areax=range(self._xpos_left,self._xpos_left+2)
+        self.art_areay=range(self._ypos_top,self._ypos_top+3)
+    def move(self,chbuff):
+        if chbuff == 'w':
+            self._ypos_top -= 6
+            if self._ypos_top<1:
+                self._ypos_top=1
+        if chbuff == 's':
+            self._ypos_top += 2
+            if self._ypos_top>int(rows)-4:
+                self._ypos_top=int(rows)-4
+        if chbuff == 'a':
+            self._xpos_left -= 1
+            if self._xpos_left<0:
+                self._xpos_left=0
+        if chbuff == 'd':
+            self._xpos_left += 1
+            if self._xpos_left>int(columns)-2:
+                self._xpos_left=int(columns)-2
+        self.art_areax=range(self._xpos_left,self._xpos_left+2)
+        self.art_areay=range(self._ypos_top,self._ypos_top+3)
+    
+            
+
+    # def print_rider(self):
         # for i in range(len(self.rider)):
         #     for j in range(len(self.rider[0])):
         #         val = ""
@@ -49,19 +78,5 @@ class Rider:
             # else:
                 # print("",end="")
         # print(reset_color,end="",flush=True)
-    def __init__(self):
-        self.gen_rider()
-        self._xpos_left = 4
-        self._ypos_top = int(rows)//2
-        self.art_areax=range(self._xpos_left,self._xpos_left+2)
-        self.art_areay=range(self._ypos_top,self._ypos_top+3)
-    def print_rider(self):
-        print("\033[" + str(self._ypos_top) + ";" + str(self._xpos_left) + "f",end="")
-        for i in range(len(self.rider)):
-            for j in range(len(self.rider[0])):
-                print(bg+self.rider[i][j],end="")
-            print("\033[2D",end="")
-            print("\033[1B",end="")
-        print("\033[0;0f",end="")
 
 x=Rider()

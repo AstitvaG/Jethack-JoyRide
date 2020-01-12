@@ -107,9 +107,14 @@ def increase_strt(board_start=0):
     # print_board1(board,board_start)
     while(board_start+int(columns)<=board_len):
         print_board1(board,board_start)
-        time.sleep(0.00001)
+        time.sleep(0.0001)
         board_start+=1
 
+def gravity():
+    # print_board1(board,board_start)
+    while True:
+        time.sleep(0.1)
+        main_rider.move('s')
             
 if __name__=="__main__":
     # print_rider(rider)
@@ -126,14 +131,25 @@ if __name__=="__main__":
         board[i][board_len-1]=add_element(fn=33,end=fg+bg)
         board[i][board_len-10]=add_element(fn=33,end=fg+bg)
         board[i][board_len-2]=add_element(fn=33,end=fg+bg)
-    thread = threading.Thread(target=increase_strt)
-    thread.start()
-    getch = Get()
-    chbuff = input_to(getch)
+    thread1 = threading.Thread(target=increase_strt)
+    thread1.setDaemon(True)
+    thread1.start()
+    thread2 = threading.Thread(target=gravity)
+    thread2.setDaemon(True)
+    thread2.start()
+    while True:
+        getch = Get()
+        chbuff = input_to(getch)
+        if chbuff:
+            if chbuff =='q':
+                thread1.join(0)
+                thread2.join(0)
+                print("\033[2J",end="")
+                exit(0)
+            elif chbuff in ['w','a','s','d']:
+                # os.system("clear")
+                # exit(0)
+                main_rider.move(chbuff)
 
-    if chbuff:
-        if chbuff =='q':
-            exit(0)
-        elif chbuff in ['w','a','s','d']:
-            main_rider.move(chebuff)
+        
     # print_board(board)
