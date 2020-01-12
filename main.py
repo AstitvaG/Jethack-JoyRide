@@ -1,21 +1,43 @@
 import os, time, threading
 from clouds import fill_in_art,small_cloud,large_cloud,add_element,board_len
 from rider import *
+from input import input_to, Get
+
 
 rows, columns = os.popen('stty size', 'r').read().split()
 reset_color="\x1B[0m"
 block = "\u2588"
 board = list()
+main_rider = Rider()
 
 
 def print_board1(board,board_start):
     print("",end="\033[0;0f")
     for i in range(int(rows)):
         for j in range(int(columns)):
-            val = ""
-            for x in board[i][j+board_start]:
-                val+=x
-            print(val,end="")
+            # print(i,j+board_start,end="\033[0;0f")
+            val=""
+            if (i not in main_rider.art_areay) or (j not in main_rider.art_areax):
+                for x in board[i][j+board_start]:
+                    val+=x
+                print(val,end="")
+            else:
+                ix=main_rider.art_areay.index(i)
+                iy=main_rider.art_areax.index(j)
+                if main_rider.rider[ix][iy][4] == 1:
+                    for x in main_rider.rider[ix][iy]:
+                        if(type(x)!=int):
+                            val+=x
+                else:
+                    val = main_rider.rider[ix][iy][0]\
+                            +board[i][j+board_start][1]\
+                            +main_rider.rider[ix][iy][2]\
+                            +main_rider.rider[ix][iy][3]
+                val+=bg+fg
+                print(val,end="")
+                # print("\x1B[33m\x1B[43m"+block+"\x1B[36m\x1B[46m",end="")
+
+            # print(reset_color)
         if i!=int(rows)-1 and j!=int(columns)-1:
             print()
         else:
@@ -27,8 +49,7 @@ def print_board1(board,board_start):
 def print_board(board,board_start):
     for i in range(int(rows)):
         for j in range(int(columns)):
-            rx = Rider()
-            if (i not in rx.art_areay) or (j not in rx.art_areax):
+            if (i not in main_rider.art_areay) or (j not in main_rider.art_areax):
                 print(board[i][j+board_start],end="")
             else:
                 print("\033[1C",end="")
@@ -45,10 +66,13 @@ def create_board():
         temp_list = list()
         for j in range(board_len):
             if(i==0):
+                #blue
                 temp_list.append("\x1B[34m\x1B[44m"+block)
             elif(i==1):
+                #cyan
                 temp_list.append("\x1B[36m\x1B[46m"+block)
             elif(i==int(rows)-1):
+                #green
                 temp_list.append("\x1B[32m\x1B[42m"+block)
             else:
                 temp_list.append(block)
@@ -99,10 +123,17 @@ if __name__=="__main__":
     # main_rider.print_rider()
     board = create_board1()
     for i in range(int(rows)):
-        board[i][board_len-1]=add_element(fn=33,end="\x1B[36m")[0]
-        board[i][board_len-10]=add_element(fn=33,end="\x1B[36m")[0]
-        board[i][board_len-2]=add_element(fn=33,end="\x1B[36m")[0]
+        board[i][board_len-1]=add_element(fn=33,end=fg+bg)
+        board[i][board_len-10]=add_element(fn=33,end=fg+bg)
+        board[i][board_len-2]=add_element(fn=33,end=fg+bg)
     thread = threading.Thread(target=increase_strt)
     thread.start()
+    getch = Get()
+    chbuff = input_to(getch)
 
+    if chbuff:
+        if chbuff =='q':
+            exit(0)
+        elif chbuff in ['w','a','s','d']:
+            main_rider.move(chebuff)
     # print_board(board)
