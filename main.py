@@ -131,6 +131,7 @@ if __name__=="__main__":
         board[i][board_len-1]=add_element(fn=33,end=fg+bg)
         board[i][board_len-10]=add_element(fn=33,end=fg+bg)
         board[i][board_len-2]=add_element(fn=33,end=fg+bg)
+        board[i][board_len-3]=add_element(fn=33,end=fg+bg)
     thread1 = threading.Thread(target=increase_strt)
     thread1.setDaemon(True)
     thread1.start()
