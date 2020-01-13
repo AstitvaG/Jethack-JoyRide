@@ -103,18 +103,21 @@ def create_board1():
 
 
 
-def increase_strt(board_start=0):
+def increase_strt(stop,board_start=0):
     # print_board1(board,board_start)
     while(board_start+int(columns)<=board_len):
         print_board1(board,board_start)
         time.sleep(0.0001)
         board_start+=1
+        
 
-def gravity():
+def gravity(stop):
     # print_board1(board,board_start)
     while True:
         time.sleep(0.1)
         main_rider.move('s')
+        if stop():
+            break
             
 if __name__=="__main__":
     # print_rider(rider)
@@ -132,17 +135,17 @@ if __name__=="__main__":
         board[i][board_len-10]=add_element(fn=33,end=fg+bg)
         board[i][board_len-2]=add_element(fn=33,end=fg+bg)
         board[i][board_len-3]=add_element(fn=33,end=fg+bg)
-    thread1 = threading.Thread(target=increase_strt)
-    thread1.setDaemon(True)
+    stop_threads = False
+    thread1 = threading.Thread(target=increase_strt, daemon=True, args =(lambda : stop_threads, ))
     thread1.start()
-    thread2 = threading.Thread(target=gravity)
-    thread2.setDaemon(True)
+    thread2 = threading.Thread(target=gravity, daemon=True, args =(lambda : stop_threads, ))
     thread2.start()
     while True:
         getch = Get()
         chbuff = input_to(getch)
         if chbuff:
             if chbuff =='q':
+                stop_threads = True
                 thread1.join(0)
                 thread2.join(0)
                 print("\033[2J",end="")

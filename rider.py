@@ -23,7 +23,10 @@ class Rider:
     # rider = [[bg+" ",gc("\u2585",224,172,172,f=0,e=0)],
     #           [gc("\u2589"),gc("\u2588",b=139,e=0)],
     #           [gc("\u2598",252,186,3),gc("\u259B",e=0)]]
-    rider = list()
+    # rider = list()
+    rider = [[['', '', ' ', '', -1], ['\x1b[38;2;224;172;172m', '\x1b[48;2;0;0;0m', '▅', '', 1]],\
+             [['\x1b[38;2;0;0;0m', '', '▉', '', -1],    ['\x1b[38;2;0;0;139m', '', '█', '', -1]],\
+             [['\x1b[38;2;252;186;3m', '', '▘', '', -1],  ['\x1b[38;2;0;0;0m', '', '▛', '', -1]]]
     def gen_rider(self):
         row=list()
         row.append(add_element(cont=1,element=" ")+[-1])
@@ -37,12 +40,15 @@ class Rider:
         row.append(add_element(r1=252,g1=186,b1=3,bx=0,element="\u2598")+[-1])
         row.append(add_element(bx=0,element="\u259B")+[-1])
         self.rider.append(row)
+
     def __init__(self):
-        self.gen_rider()
+        # self.gen_rider()
         self._xpos_left = 4
         self._ypos_top = int(rows)//2
-        self.art_areax=range(self._xpos_left,self._xpos_left+2)
-        self.art_areay=range(self._ypos_top,self._ypos_top+3)
+        self.art_areax=range(self._xpos_left,self._xpos_left+len(self.rider[0]))
+        self.art_areay=range(self._ypos_top,self._ypos_top+len(self.rider))
+        # self.print_rider()
+
     def move(self,chbuff):
         if chbuff == 'w':
             self._ypos_top -= 6
@@ -62,21 +68,21 @@ class Rider:
                 self._xpos_left=int(columns)-2
         self.art_areax=range(self._xpos_left,self._xpos_left+2)
         self.art_areay=range(self._ypos_top,self._ypos_top+3)
-    
-            
 
-    # def print_rider(self):
-        # for i in range(len(self.rider)):
-        #     for j in range(len(self.rider[0])):
-        #         val = ""
-        #         for x in self.rider[i][j]:
-        #             if(type(x)!=int):
-        #                 val+=x
-        #         print(val,end="")
-        #     # if i!=int(rows)-1 and j!=int(columns)-1:
-        #     print(reset_color)
+    def print_rider(self):
+        for i in self.rider:
+            print(i)
+        for i in range(len(self.rider)):
+            for j in range(len(self.rider[0])):
+                val = ""
+                for x in self.rider[i][j]:
+                    if(type(x)!=int):
+                        val+=x
+                print(val,end="")
+            # if i!=int(rows)-1 and j!=int(columns)-1:
+            print(reset_color)
             # else:
-                # print("",end="")
-        # print(reset_color,end="",flush=True)
+            print("",end="")
+        print(reset_color,end="",flush=True)
 
-x=Rider()
+# x=Rider()
