@@ -79,7 +79,7 @@ small_cloud = [[0,0,0,1,1,1,0,0],
 #             print(value+block,end="")
 #         print(reset_color)
 
-def fill_in_art(board,freq,art):
+def fill_in_clouds(board,freq,art):
     for p in range(board_len//freq):
         starty=randint(3,freq-3-len(art[0]))+p*freq
         startx=randint(3,int(rows)-3-len(art))
@@ -90,4 +90,3 @@ def fill_in_art(board,freq,art):
                 if art[i][j]==1:
                     board[startx+i][starty+j]=add_element(fn=37,end="\x1B[36m\x1B[46m")
                     # print(add_element(fn=37,end="\x1B[36m\x1B[46m"))
-

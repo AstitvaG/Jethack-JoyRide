@@ -1,7 +1,9 @@
 import os, time, threading
-from clouds import fill_in_art,small_cloud,large_cloud,add_element,board_len
+from clouds import fill_in_clouds,small_cloud,large_cloud,add_element,board_len
 from rider import *
 from input import input_to, Get
+from random import randint
+from arcs import fill_in_art
 
 
 rows, columns = os.popen('stty size', 'r').read().split()
@@ -77,8 +79,8 @@ def create_board():
             else:
                 temp_list.append(block)
         board.append(temp_list)
-    fill_in_art(board,30,small_cloud)
-    fill_in_art(board,100,large_cloud)
+    fill_in_clouds(board,30,small_cloud)
+    fill_in_clouds(board,100,large_cloud)
     return board
 
 
@@ -97,8 +99,12 @@ def create_board1():
             else:
                 add_element(temp_list,cont=1)
         board.append(temp_list)
-    fill_in_art(board,30,small_cloud)
-    fill_in_art(board,100,large_cloud)
+    fill_in_clouds(board,30,small_cloud)
+    fill_in_clouds(board,100,large_cloud)
+    for i in range(board_len//100):
+        val=randint(1,4)
+        fill_in_art(board,val,i,int(columns)//3)
+
     return board
 
 
@@ -107,8 +113,10 @@ def increase_strt(stop,board_start=0):
     # print_board1(board,board_start)
     while(board_start+int(columns)<=board_len):
         print_board1(board,board_start)
-        time.sleep(0.0001)
+        time.sleep(0.1)
         board_start+=1
+        if stop():
+            break
         
 
 def gravity(stop):
@@ -116,6 +124,7 @@ def gravity(stop):
     while True:
         time.sleep(0.1)
         main_rider.move('s')
+        main_rider.move('a')
         if stop():
             break
             

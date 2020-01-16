@@ -65,7 +65,7 @@ class Rider:
             if self._xpos_left<0:
                 self._xpos_left=0
         if chbuff == 'd':
-            self._xpos_left += 1
+            self._xpos_left += 3
             if self._xpos_left>int(columns)-2:
                 self._xpos_left=int(columns)-2
         self.art_areax=range(self._xpos_left,self._xpos_left+2)
