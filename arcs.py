@@ -2,9 +2,8 @@ from random import randint
 import os
 from clouds import board_len
 from rider import Rider
+from defs import rows,fg,bg,reset_color
 
-reset_color="\x1B[0m"
-rows, columns = os.popen('stty size', 'r').read().split()
 rows = int(rows)
 
 col_yf='\x1B[38;2;255;255;0m'
@@ -24,8 +23,7 @@ arc_l = [
             [['','',' ','',-1],[col_yf, col_ob, '▝' , '', 1],[col_of,'','▘','',-1]]
         ]
 
-bg = "\x1B[46m"
-fg = "\x1B[36m"
+
 
 def fill_in_art(board,val,freq,len):
     if val==1:

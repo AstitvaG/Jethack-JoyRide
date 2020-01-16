@@ -1,11 +1,6 @@
 from random import randint
 import os
-# from main import add_element
-block = "\u2588"
-board_len = 10000
-
-
-
+from defs import block,board_len,rows
 
 def add_element(temp_list=None,cont=-1,fn=-1,bn=-1,r1=0,g1=0,b1=0,bx=-1,r2=0,g2=0,b2=0,element=block,end=""):
     """
@@ -57,9 +52,6 @@ def add_element(temp_list=None,cont=-1,fn=-1,bn=-1,r1=0,g1=0,b1=0,bx=-1,r2=0,g2=
         return temp_list[0]
             
 
-rows, columns = os.popen('stty size', 'r').read().split()
-block = "\u2588"
-
 large_cloud = [[0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
                [0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
                [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -68,16 +60,6 @@ large_cloud = [[0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
 small_cloud = [[0,0,0,1,1,1,0,0],
                [0,0,1,1,1,1,1,0],
                [1,1,1,1,1,1,1,1]]
-
-# def print_cloud(art):
-#     for i in range(len(art)):
-#         for j in range(len(art[0])):
-#             if(art[i][j]==0):
-#                 value = "\x1B[36m"
-#             else:
-#                 value = "\x1B[37m"
-#             print(value+block,end="")
-#         print(reset_color)
 
 def fill_in_clouds(board,freq,art):
     for p in range(board_len//freq):

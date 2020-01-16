@@ -1,14 +1,6 @@
 import os
 from clouds import add_element
-rows, columns = os.popen('stty size', 'r').read().split()
-block = "\u2588"
-
-rows, columns = os.popen('stty size', 'r').read().split()
-reset_color="\x1B[0m"
-block = "\u2588"
-board = list()
-bg = "\x1B[46m"
-fg = "\x1B[36m"
+from defs import reset_color,rows,columns
 
 def gc(c="\u2588",r=0,g=0,b=0,f=1,e=1,c1="",r1=0,g1=0,b1=0):
     ret_str = "\x1b[38;2;"+str(r)+";"+str(g)+";"+str(b)+"m"+str(c)
