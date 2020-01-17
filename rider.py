@@ -1,6 +1,7 @@
 import os
 from clouds import add_element
 from defs import reset_color,rows,columns
+import defs
 
 def gc(c="\u2588",r=0,g=0,b=0,f=1,e=1,c1="",r1=0,g1=0,b1=0):
     ret_str = "\x1b[38;2;"+str(r)+";"+str(g)+";"+str(b)+"m"+str(c)
@@ -48,20 +49,29 @@ class Rider:
             self._ypos_top -= 6
             if self._ypos_top<1:
                 self._ypos_top=1
-        if chbuff == 's':
+        elif chbuff == 's':
             self._ypos_top += 2
             if self._ypos_top>int(rows)-4:
                 self._ypos_top=int(rows)-4
-        if chbuff == 'a':
+        elif chbuff == 'a':
             self._xpos_left -= 1
             if self._xpos_left<0:
                 self._xpos_left=0
-        if chbuff == 'd':
+        elif chbuff == 'd':
             self._xpos_left += 3
             if self._xpos_left>int(columns)-2:
                 self._xpos_left=int(columns)-2
-        self.art_areax=range(self._xpos_left,self._xpos_left+2)
-        self.art_areay=range(self._ypos_top,self._ypos_top+3)
+        self.art_areax=range(self._xpos_left,self._xpos_left++len(self.rider[0]))
+        self.art_areay=range(self._ypos_top,self._ypos_top++len(self.rider))
+       
+    def check_pos(self):
+        for i in self.art_areay:
+            for j in self.art_areax:
+                if(j+defs.board_start-1>defs.board_len-1): return -1
+                if defs.board_check[i][j+defs.board_start-1]==1:
+                    return 2
+
+
 
     def print_rider(self):
         for i in self.rider:
@@ -78,5 +88,10 @@ class Rider:
             # else:
             print("",end="")
         print(reset_color,end="",flush=True)
-
-# x=Rider()
+        print(self.art_areax)
+        print(self.art_areay)
+        for i in self.art_areay:
+            for j in self.art_areax:
+                print(reset_color,"\n",i,j+int(columns)*(defs.board_start))
+# x = Rider()
+# x.print_rider()
