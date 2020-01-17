@@ -5,6 +5,7 @@ from input import input_to, Get
 from random import sample
 from arcs import fill_in_art
 from defs import rows,columns,fg,bg,reset_color,board_len
+from coins import fill_in_coins
 import defs
 
 
@@ -59,6 +60,7 @@ def create_board():
         val=sample(range(1,5),2)
         fill_in_art(board,val[0],i,int(columns)//3)
         fill_in_art(board,val[1],i,int(columns)//3)
+    fill_in_coins(board,100)
     return board
 
 def create_check():

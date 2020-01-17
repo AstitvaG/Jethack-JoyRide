@@ -46,9 +46,9 @@ class Rider:
 
     def move(self,chbuff):
         if chbuff == 'w':
-            self._ypos_top -= 6
-            if self._ypos_top<1:
-                self._ypos_top=1
+            self._ypos_top -= 4
+            if self._ypos_top<-1:
+                self._ypos_top=-1
         elif chbuff == 's':
             self._ypos_top += 2
             if self._ypos_top>int(rows)-4:
