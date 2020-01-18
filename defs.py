@@ -9,3 +9,4 @@ plain_board = list()
 board_len = 1070
 board_check = list()
 board_start = 0
+speed = 0.1

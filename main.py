@@ -6,7 +6,7 @@ from random import sample
 from arcs import fill_in_art
 from defs import rows,columns,fg,bg,reset_color,board_len
 from coins import fill_in_coins
-import defs,copy
+import defs,copy,bullet
 
 
 def print_board(board_start):
@@ -33,6 +33,9 @@ def print_board(board_start):
                 for x in defs.plain_board[i][j+board_start]:
                     val+=x
                 print(val,end="")
+            elif defs.board_check[i][j+board_start]==9:
+                b = bullet.Bullet.fill_in()
+                print(b[0]+board[i][j+board_start][1]+b[2]+b[3],end="")
             else:
                 for x in board[i][j+board_start]:
                     val+=x
@@ -82,10 +85,10 @@ def create_check():
 def increase_strt(stop):
     while(defs.board_start+int(columns)<=board_len):
         print_board(defs.board_start)
-        time.sleep(0.1)
+        time.sleep(defs.speed)
         defs.board_start+=1
         main_rider.move('s')
-        main_rider.move('a')
+        main_rider.move('a',True)
         if main_rider.check_pos() == 1:
             print_board(defs.board_start)
             break
@@ -119,6 +122,9 @@ if __name__=="__main__":
                 exit(0)
             elif chbuff in ['w','a','s','d']:
                 main_rider.move(chbuff)
+            elif chbuff == 'j':
+                bulletx = bullet.Bullet(main_rider._xpos_left+len(main_rider.rider[0])+2,\
+                    main_rider._ypos_top,int(defs.columns)) 
         else:
             main_rider.change_rider(0)
         if main_rider.check_pos() == 1:

@@ -35,6 +35,11 @@ class Rider:
              [['\x1b[38;2;0;0;0m', '', '▉', '', -1],    ['\x1b[38;2;0;0;139m', '', '█', '', -1]],
              [['\x1b[38;2;252;186;3m', '', '▘', '', -1],  ['\x1b[38;2;0;0;0m', '', '▛', '', -1]]
             ]
+    rider_flyback = [
+             [['', '', ' ', '', -1], ['\x1b[38;2;224;172;172m', '\x1b[48;2;0;0;0m', '▅', '', 1]],
+             [['\x1b[38;2;0;0;0m', '', '▉', '', -1],    ['\x1b[38;2;0;0;139m', '', '█', '', -1]],
+             [['\x1b[38;2;252;186;3m', '', '▘', '', -1],  ['\x1b[38;2;0;0;0m', '', '▜', '', -1]]
+            ]
     def gen_rider(self):
         row=list()
         row.append(add_element(cont=1,element=" ")+[-1])
@@ -52,7 +57,9 @@ class Rider:
     def change_rider(self,val):
         if val==1:
             self.rider=self.rider_fly
-        if val==0:
+        elif val==2:
+            self.rider=self.rider_flyback
+        elif val==0:
             self.rider=self.rider_normal
 
     def __init__(self):
@@ -63,7 +70,7 @@ class Rider:
         self.art_areay=range(self._ypos_top,self._ypos_top+len(self.rider))
         # self.print_rider()
 
-    def move(self,chbuff):
+    def move(self,chbuff,x=False):
         if chbuff == 'w':
             self._ypos_top -= 4
             if self._ypos_top<-1:
@@ -77,6 +84,8 @@ class Rider:
             self._xpos_left -= 1
             if self._xpos_left<0:
                 self._xpos_left=0
+            if x==False:
+                self.change_rider(2)
         elif chbuff == 'd':
             self._xpos_left += 3
             if self._xpos_left>int(columns)-2:
