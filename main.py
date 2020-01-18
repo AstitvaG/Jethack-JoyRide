@@ -1,4 +1,4 @@
-import os, time, threading
+import os, time, threading, _thread
 from clouds import fill_in_clouds,small_cloud,large_cloud,add_element
 from rider import Rider
 from input import input_to, Get
@@ -6,19 +6,16 @@ from random import sample
 from arcs import fill_in_art
 from defs import rows,columns,fg,bg,reset_color,board_len
 from coins import fill_in_coins
-import defs
+import defs,copy
 
 
-def print_board(board,board_start):
+def print_board(board_start):
+    board=defs.board
     print("",end="\033[0;0f")
     for i in range(int(rows)):
         for j in range(int(columns)):
             val=""
-            if (i not in main_rider.art_areay) or (j not in main_rider.art_areax):
-                for x in board[i][j+board_start]:
-                    val+=x
-                print(val,end="")
-            else:
+            if (i in main_rider.art_areay) and (j in main_rider.art_areax):
                 ix=main_rider.art_areay.index(i)
                 iy=main_rider.art_areax.index(j)
                 if main_rider.rider[ix][iy][4] == 1:
@@ -32,12 +29,19 @@ def print_board(board,board_start):
                             +main_rider.rider[ix][iy][3]
                 val+=bg+fg
                 print(val,end="")
+            elif defs.board_check[i][j+board_start]==0:
+                for x in defs.plain_board[i][j+board_start]:
+                    val+=x
+                print(val,end="")
+            else:
+                for x in board[i][j+board_start]:
+                    val+=x
+                print(val,end="")
         if i!=int(rows)-1 and j!=int(columns)-1:
             print()
         else:
             print("",end="")
     print(reset_color,end="",flush=True)
-
 
 
 def create_board():
@@ -56,6 +60,7 @@ def create_board():
         board.append(temp_list)
     fill_in_clouds(board,30,small_cloud)
     fill_in_clouds(board,100,large_cloud)
+    defs.plain_board=copy.deepcopy(board)
     for i in range(2,board_len//100):
         val=sample(range(1,5),2)
         fill_in_art(board,val[0],i,int(columns)//3)
@@ -76,26 +81,27 @@ def create_check():
 
 def increase_strt(stop):
     while(defs.board_start+int(columns)<=board_len):
-        print_board(board,defs.board_start)
+        print_board(defs.board_start)
         time.sleep(0.1)
         defs.board_start+=1
         main_rider.move('s')
         main_rider.move('a')
-        if main_rider.check_pos() ==2:
-            print_board(board,defs.board_start)
+        if main_rider.check_pos() == 1:
+            print_board(defs.board_start)
             break
         if stop():
-            break
+            print("\033[2J",end="")
+            _thread.interrupt_main()
 
 if __name__=="__main__":
     main_rider = Rider()
     defs.board_check = create_check()
-    board = create_board()
+    defs.board = create_board()
     for i in range(int(rows)):
-        board[i][board_len-1]=add_element(fn=33,end=fg+bg)
-        board[i][board_len-10]=add_element(fn=33,end=fg+bg)
-        board[i][board_len-2]=add_element(fn=33,end=fg+bg)
-        board[i][board_len-3]=add_element(fn=33,end=fg+bg)
+        defs.board[i][board_len-1]=add_element(fn=33,end=fg+bg)
+        defs.board[i][board_len-10]=add_element(fn=33,end=fg+bg)
+        defs.board[i][board_len-2]=add_element(fn=33,end=fg+bg)
+        defs.board[i][board_len-3]=add_element(fn=33,end=fg+bg)
     stop_threads = False
     thread1 = threading.Thread(target=increase_strt, daemon=True, args =(lambda : stop_threads, ))
     thread1.start()
@@ -113,9 +119,11 @@ if __name__=="__main__":
                 exit(0)
             elif chbuff in ['w','a','s','d']:
                 main_rider.move(chbuff)
-        if main_rider.check_pos() ==2:
+        else:
+            main_rider.change_rider(0)
+        if main_rider.check_pos() == 1:
             stop_threads = True
             thread1.join(0)
             print("\033[2J",end="")
-            print_board(board,defs.board_start)
-            break
+            print_board(defs.board_start)
+            exit(0)

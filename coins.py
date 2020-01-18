@@ -19,10 +19,11 @@ def fill_in_coins(board,freq):
                 x=int(x)
                 y=int(y)
                 try:
-                    if defs.board_check[y][x] != 1 and defs.board_check[y][x-1]!=2:
+                    if defs.board_check[y][x] != 1 and defs.board_check[y][x-1]!=2 and defs.board_check[y][x+1] != 1:
                         board[y][x]=[coin0[0],board[y][x][1],coin0[2],coin0[3]]
                         board[y][x+1]=[coin1[0],board[y][x+1][1],coin1[2],coin1[3]]
                         defs.board_check[y][x]=2
+                        defs.board_check[y][x+1]=2
                 except:
                     pass
             # print(y,pos_x)
