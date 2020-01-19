@@ -1,9 +1,9 @@
 class Stats:
     _livesLeft=3
-    _coinsCollected=0
+    coinsCollected=0
     _isAlive=True
     def incrCoins(self):
-        self._coinsCollected+=1
+        self.coinsCollected+=1
     def killed(self):
         self._livesLeft-=1
         if(self._livesLeft<0):

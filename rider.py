@@ -64,35 +64,35 @@ class Rider:
 
     def __init__(self):
         # self.gen_rider()
-        self._xpos_left = 4
-        self._ypos_top = int(rows)//2
-        self.art_areax=range(self._xpos_left,self._xpos_left+len(self.rider[0]))
-        self.art_areay=range(self._ypos_top,self._ypos_top+len(self.rider))
+        self.xpos_left = 4
+        self.ypos_top = int(rows)//2
+        self.art_areax=range(self.xpos_left,self.xpos_left+len(self.rider[0]))
+        self.art_areay=range(self.ypos_top,self.ypos_top+len(self.rider))
         # self.print_rider()
 
     def move(self,chbuff,x=False):
         if chbuff == 'w':
-            self._ypos_top -= 4
-            if self._ypos_top<-1:
-                self._ypos_top=-1
+            self.ypos_top -= 4
+            if self.ypos_top<-1:
+                self.ypos_top=-1
             self.change_rider(1)
         elif chbuff == 's':
-            self._ypos_top += 2
-            if self._ypos_top>int(rows)-4:
-                self._ypos_top=int(rows)-4
+            self.ypos_top += 2
+            if self.ypos_top>int(rows)-4:
+                self.ypos_top=int(rows)-4
         elif chbuff == 'a':
-            self._xpos_left -= 1
-            if self._xpos_left<0:
-                self._xpos_left=0
+            self.xpos_left -= 1
+            if self.xpos_left<0:
+                self.xpos_left=0
             if x==False:
                 self.change_rider(2)
         elif chbuff == 'd':
-            self._xpos_left += 3
-            if self._xpos_left>int(columns)-2:
-                self._xpos_left=int(columns)-2
+            self.xpos_left += 3
+            if self.xpos_left>int(columns)-2:
+                self.xpos_left=int(columns)-2
             self.change_rider(1)
-        self.art_areax=range(self._xpos_left,self._xpos_left++len(self.rider[0]))
-        self.art_areay=range(self._ypos_top,self._ypos_top++len(self.rider))
+        self.art_areax=range(self.xpos_left,self.xpos_left++len(self.rider[0]))
+        self.art_areay=range(self.ypos_top,self.ypos_top++len(self.rider))
        
     def check_pos(self):
         for i in self.art_areay:
@@ -100,13 +100,15 @@ class Rider:
                 if(j+defs.board_start-1>defs.board_len-1): return -1
                 if defs.board_check[i][j+defs.board_start-1]==1:
                     return 1
-                if defs.board_check[i][j+defs.board_start-1] == 2:
-                    defs.board_check[i][j+defs.board_start-1]=0
-                    defs.board_check[i][j+defs.board_start-2]=0
+                if defs.board_check[i][j+defs.board_start] == 2:
                     defs.board_check[i][j+defs.board_start]=0
+                    defs.board_check[i][j+defs.board_start-1]=0
+                    defs.board_check[i][j+defs.board_start+1]=0
                     game_stats.incrCoins()
                     return 2
 
+    def return_coins(self):
+        return game_stats.coinsCollected
 
 
     def print_rider(self):

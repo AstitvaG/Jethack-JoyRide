@@ -6,7 +6,7 @@ from random import sample
 from arcs import fill_in_art
 from defs import rows,columns,fg,bg,reset_color,board_len
 from coins import fill_in_coins
-import defs,copy,bullet
+import defs,copy,bullet,stats
 
 
 def print_board(board_start):
@@ -45,6 +45,12 @@ def print_board(board_start):
         else:
             print("",end="")
     print(reset_color,end="",flush=True)
+    print("",end="\033[0;0f")
+    
+    print(reset_color+str(main_rider.xpos_left)+'/'+defs.columns,\
+        str(main_rider.ypos_top)+'/'+defs.rows+reset_color,\
+        main_rider.return_coins(),(defs.board_start+main_rider.xpos_left+2))
+
 
 
 def create_board():
@@ -108,8 +114,6 @@ if __name__=="__main__":
     stop_threads = False
     thread1 = threading.Thread(target=increase_strt, daemon=True, args =(lambda : stop_threads, ))
     thread1.start()
-    # thread2 = threading.Thread(target=gravity, daemon=True, args =(lambda : stop_threads, ))
-    # thread2.start()
     while True:
         getch = Get()
         chbuff = input_to(getch)
@@ -117,14 +121,14 @@ if __name__=="__main__":
             if chbuff =='q':
                 stop_threads = True
                 thread1.join(0)
-                # thread2.join(0)
                 print("\033[2J",end="")
                 exit(0)
             elif chbuff in ['w','a','s','d']:
                 main_rider.move(chbuff)
             elif chbuff == 'j':
-                bulletx = bullet.Bullet(main_rider._xpos_left+len(main_rider.rider[0])+2,\
-                    main_rider._ypos_top,int(defs.columns)) 
+                # print(main_rider.xpos_left,main_rider.ypos_top)
+                bullet.Bullet(main_rider.xpos_left+defs.board_start+len(main_rider.rider[0]),\
+                    main_rider.ypos_top,defs.board_len) 
         else:
             main_rider.change_rider(0)
         if main_rider.check_pos() == 1:

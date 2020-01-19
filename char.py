@@ -19,15 +19,15 @@ rider = [[" ",gc("\u2585",224,172,172,f=0,e=0)],
 
 class Rider:
     def __init__(self):
-        self._xpos_left = 4
-        self._ypos_top = int(rows)//2
-        self.art_areax=range(self._xpos_left,self._xpos_left+len(rider[0]))
-        self.art_areay=range(self._ypos_top,self._ypos_top+len(rider))
+        self.xpos_left = 4
+        self.ypos_top = int(rows)//2
+        self.art_areax=range(self.xpos_left,self.xpos_left+len(rider[0]))
+        self.art_areay=range(self.ypos_top,self.ypos_top+len(rider))
         
         # print(self.art_areax)
         # print(self.art_areay)
     def print_rider(self):
-        print("\033[" + str(self._ypos_top) + ";" + str(self._xpos_left) + "f",end="")
+        print("\033[" + str(self.ypos_top) + ";" + str(self.xpos_left) + "f",end="")
         for i in range(len(rider)):
             for j in range(len(rider[0])):
                 print(rider[i][j],end="")
