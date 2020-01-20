@@ -1,8 +1,9 @@
 import os
 from clouds import add_element
-from defs import reset_color,rows,columns
-import defs
+from defs import reset_color,rows,columns,col_sb,col_sf
+import defs,time,threading
 from stats import Stats
+from bullet import Bullet
 
 game_stats=Stats()
 
@@ -16,10 +17,6 @@ def gc(c="\u2588",r=0,g=0,b=0,f=1,e=1,c1="",r1=0,g1=0,b1=0):
     return ret_str
 
 class Rider:
-    # rider = [[bg+" ",gc("\u2585",224,172,172,f=0,e=0)],
-    #           [gc("\u2589"),gc("\u2588",b=139,e=0)],
-    #           [gc("\u2598",252,186,3),gc("\u259B",e=0)]]
-    # rider = list()
     rider = [
              [['', '', ' ', '', -1], ['\x1b[38;2;224;172;172m', '\x1b[48;2;0;0;0m', '▅', '', 1]],
              [['\x1b[38;2;0;0;0m', '', '▉', '', -1],    ['\x1b[38;2;0;0;139m', '', '█', '', -1]],
@@ -40,6 +37,58 @@ class Rider:
              [['\x1b[38;2;0;0;0m', '', '▉', '', -1],    ['\x1b[38;2;0;0;139m', '', '█', '', -1]],
              [['\x1b[38;2;252;186;3m', '', '▘', '', -1],  ['\x1b[38;2;0;0;0m', '', '▜', '', -1]]
             ]
+
+    sheild_rider = [
+                [
+                    [col_sf,'','▗','',-1],
+                    [col_sf,col_sb,'█','',1],
+                    [col_sf,col_sb,'█','',1],
+                    [col_sf,'','▖','',-1]
+                ],
+                [
+                    [col_sf,col_sb,'█','',1],
+                    ['', '', ' ', '', 1],
+                    ['\x1b[38;2;224;172;172m', '\x1b[48;2;0;0;0m', '▅', '', 1],
+                    [col_sf,col_sb,'█','',1]
+                ],
+                [
+                    [col_sf,col_sb,'█','',1],
+                    ['\x1b[38;2;0;0;0m', '', '▉', '', 1],
+                    ['\x1b[38;2;0;0;139m', '', '█', '', 1],
+                    [col_sf,col_sb,'█','',1]
+                ],
+                [
+                    [col_sf,col_sb,'█','',1],
+                    ['\x1b[38;2;252;186;3m', '', '▘', '', 1],
+                    ['\x1b[38;2;0;0;0m', '', '▛', '', 1],
+                    [col_sf,col_sb,'█','',1]
+                ],
+                [
+                    [col_sf,'','▝','',1],
+                    [col_sf,col_sb,'█','',1],
+                    [col_sf,col_sb,'█','',1],
+                    [col_sf,'','▘','',1]
+                ],
+            ]
+    _isSheilded=False
+    _isSheildPossible=True
+    def sheild_toggle(self):
+        self._isSheildPossible=False
+        time.sleep(60)
+        self._isSheildPossible=True
+    def activate_sheild(self):
+        self.change_rider(3)
+        self._isSheilded=True
+        time.sleep(10)
+        self._isSheilded=False
+        self.change_rider(0)
+    def sheild(self):
+        if self._isSheildPossible:
+            thread1 = threading.Thread(target=self.sheild_toggle, daemon=True)
+            thread1.start()
+            thread2 = threading.Thread(target=self.activate_sheild, daemon=True)
+            thread2.start()
+
     def gen_rider(self):
         row=list()
         row.append(add_element(cont=1,element=" ")+[-1])
@@ -61,6 +110,11 @@ class Rider:
             self.rider=self.rider_flyback
         elif val==0:
             self.rider=self.rider_normal
+        elif val==3:
+            self.rider=self.sheild_rider
+            self.xpos_left+=1
+            self.ypos_top+=1
+
 
     def __init__(self):
         # self.gen_rider()
@@ -75,31 +129,38 @@ class Rider:
             self.ypos_top -= 4
             if self.ypos_top<-1:
                 self.ypos_top=-1
-            self.change_rider(1)
+            if not self._isSheilded:    
+                self.change_rider(1)
         elif chbuff == 's':
             self.ypos_top += 2
-            if self.ypos_top>int(rows)-4:
-                self.ypos_top=int(rows)-4
+            if self.ypos_top>int(rows)-1-len(self.rider):
+                self.ypos_top=int(rows)-1-len(self.rider)
         elif chbuff == 'a':
             self.xpos_left -= 1
             if self.xpos_left<0:
                 self.xpos_left=0
-            if x==False:
+            if x==False and not self._isSheilded:
                 self.change_rider(2)
         elif chbuff == 'd':
             self.xpos_left += 3
             if self.xpos_left>int(columns)-2:
                 self.xpos_left=int(columns)-2
-            self.change_rider(1)
+            if not self._isSheilded:    
+                self.change_rider(1)
         self.art_areax=range(self.xpos_left,self.xpos_left++len(self.rider[0]))
         self.art_areay=range(self.ypos_top,self.ypos_top++len(self.rider))
        
     def check_pos(self):
         for i in self.art_areay:
             for j in self.art_areax:
-                if(j+defs.board_start-1>defs.board_len-1): return -1
-                if defs.board_check[i][j+defs.board_start-1]==1:
+                if(j+defs.board_start-1>defs.board_len-1): 
+                    return -1
+                if defs.board_check[i][j+defs.board_start-1]==1 and not self._isSheilded:
                     return 1
+                elif defs.board_check[i][j+defs.board_start-1]==1:
+                    self._isSheilded=False
+                    Bullet.clearArcs(j+defs.board_start-1,i)
+                    return -1
                 if defs.board_check[i][j+defs.board_start] == 2:
                     defs.board_check[i][j+defs.board_start]=0
                     defs.board_check[i][j+defs.board_start-1]=0

@@ -128,8 +128,10 @@ if __name__=="__main__":
             elif chbuff == 'j':
                 # print(main_rider.xpos_left,main_rider.ypos_top)
                 bullet.Bullet(main_rider.xpos_left+defs.board_start+len(main_rider.rider[0]),\
-                    main_rider.ypos_top,defs.board_len) 
-        else:
+                    main_rider.ypos_top,defs.board_len)
+            elif chbuff == ' ':
+                main_rider.sheild() 
+        elif not main_rider._isSheilded:
             main_rider.change_rider(0)
         if main_rider.check_pos() == 1:
             stop_threads = True
