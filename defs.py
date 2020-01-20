@@ -12,3 +12,4 @@ board_len = 1070
 board_check = list()
 board_start = 0
 speed = 0.1
+def_speed = speed

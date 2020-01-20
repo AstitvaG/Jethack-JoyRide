@@ -6,7 +6,7 @@ from random import sample
 from arcs import fill_in_art
 from defs import rows,columns,fg,bg,reset_color,board_len
 from coins import fill_in_coins
-import defs,copy,bullet,stats
+import defs,copy,bullet,stats,powerup
 
 
 def print_board(board_start):
@@ -36,6 +36,9 @@ def print_board(board_start):
             elif defs.board_check[i][j+board_start]==9:
                 b = bullet.Bullet.fill_in()
                 print(b[0]+board[i][j+board_start][1]+b[2]+b[3],end="")
+            elif defs.board_check[i][j+board_start]==5:
+                b = powerup.Powerup.fill_in()
+                print(b[0]+b[1]+b[2]+b[3],end="")
             else:
                 for x in board[i][j+board_start]:
                     val+=x
@@ -75,6 +78,7 @@ def create_board():
         fill_in_art(board,val[0],i,int(columns)//3)
         fill_in_art(board,val[1],i,int(columns)//3)
     fill_in_coins(board,100)
+    powerup.Powerup(defs.board_len//5)
     return board
 
 def create_check():

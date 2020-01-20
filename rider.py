@@ -126,29 +126,29 @@ class Rider:
 
     def move(self,chbuff,x=False):
         if chbuff == 'w':
-            self.ypos_top -= 4
+            self.ypos_top -= int(4*(defs.def_speed//defs.speed))
             if self.ypos_top<-1:
                 self.ypos_top=-1
             if not self._isSheilded:    
                 self.change_rider(1)
         elif chbuff == 's':
-            self.ypos_top += 2
+            self.ypos_top += int(2*(defs.def_speed//defs.speed))
             if self.ypos_top>int(rows)-1-len(self.rider):
                 self.ypos_top=int(rows)-1-len(self.rider)
         elif chbuff == 'a':
-            self.xpos_left -= 1
+            self.xpos_left -= int(1*(defs.def_speed//defs.speed))
             if self.xpos_left<0:
                 self.xpos_left=0
             if x==False and not self._isSheilded:
                 self.change_rider(2)
         elif chbuff == 'd':
-            self.xpos_left += 3
+            self.xpos_left += int(3*(defs.def_speed//defs.speed))
             if self.xpos_left>int(columns)-2:
                 self.xpos_left=int(columns)-2
             if not self._isSheilded:    
                 self.change_rider(1)
-        self.art_areax=range(self.xpos_left,self.xpos_left++len(self.rider[0]))
-        self.art_areay=range(self.ypos_top,self.ypos_top++len(self.rider))
+        self.art_areax=range(self.xpos_left,self.xpos_left+len(self.rider[0]))
+        self.art_areay=range(self.ypos_top,self.ypos_top+len(self.rider))
        
     def check_pos(self):
         for i in self.art_areay:
@@ -166,6 +166,10 @@ class Rider:
                     defs.board_check[i][j+defs.board_start-1]=0
                     defs.board_check[i][j+defs.board_start+1]=0
                     game_stats.incrCoins()
+                    return 2
+                if defs.board_check[i][j+defs.board_start] == 5:
+                    defs.board_check[i][j+defs.board_start]=0
+                    defs.speed/=1.5
                     return 2
 
     def return_coins(self):
