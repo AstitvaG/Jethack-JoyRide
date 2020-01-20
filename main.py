@@ -6,7 +6,7 @@ from random import sample
 from arcs import fill_in_art
 from defs import rows,columns,fg,bg,reset_color,board_len
 from coins import fill_in_coins
-import defs,copy,bullet,stats,powerup
+import defs,copy,bullet,powerup,enemy
 
 start_time = time.time()
 
@@ -26,18 +26,22 @@ def print_board(board_start):
                             val+=x
                 else:
                     val = main_rider.rider[ix][iy][0]\
-                            +board[i][j+board_start][1]\
+                            +defs.plain_board[i][j+board_start][1]\
                             +main_rider.rider[ix][iy][2]\
                             +main_rider.rider[ix][iy][3]
                 val+=bg+fg
                 print(val,end="")
+            elif j+board_start-defs.enemyrelpos>0 and\
+            defs.board_check[i][j+board_start-defs.enemyrelpos] in [6,7,8]:
+                b = enemy.Enemy.fill_in(defs.board_check[i][j+board_start-defs.enemyrelpos])
+                print(b[0]+b[1]+b[2]+b[3],end="")
             elif defs.board_check[i][j+board_start]==0:
                 for x in defs.plain_board[i][j+board_start]:
                     val+=x
                 print(val,end="")
             elif defs.board_check[i][j+board_start]==9:
                 b = bullet.Bullet.fill_in()
-                print(b[0]+board[i][j+board_start][1]+b[2]+b[3],end="")
+                print(b[0]+defs.plain_board[i][j+board_start][1]+b[2]+b[3],end="")
             elif defs.board_check[i][j+board_start]==5:
                 b = powerup.Powerup.fill_in()
                 print(b[0]+b[1]+b[2]+b[3],end="")
@@ -54,8 +58,8 @@ def print_board(board_start):
     
     print(reset_color+str(main_rider.xpos_left)+'/'+defs.columns,\
         str(main_rider.ypos_top)+'/'+defs.rows+reset_color,\
-        main_rider.return_coins(),(defs.board_start+main_rider.xpos_left+2),
-        math.floor(time.time()-start_time))
+        defs.coinsCollected,defs.enemiesKilled,defs.bulletsFired\
+        ,math.floor(time.time()-start_time))
 
 
 
@@ -76,12 +80,17 @@ def create_board():
     fill_in_clouds(board,30,small_cloud)
     fill_in_clouds(board,100,large_cloud)
     defs.plain_board=copy.deepcopy(board)
-    for i in range(board_len//(2*int(rows)//3+1)):
+    for i in range(2,board_len//(2*int(rows)//3+1)):
         val=sample(range(1,5),2)
-        fill_in_art(board,val[0],2*int(rows)//3+1,i)
-        fill_in_art(board,val[1],2*int(rows)//3+1,i)
+        try:
+            fill_in_art(board,val[0],2*int(rows)//3+1,i)
+        except:pass
+        try:
+            fill_in_art(board,val[1],2*int(rows)//3+1,i)
+        except:pass
     fill_in_coins(board,100)
     powerup.Powerup(defs.board_len//5)
+    enemy.Enemy(40)
     return board
 
 def create_check():
@@ -100,6 +109,7 @@ def increase_strt(stop):
         print_board(defs.board_start)
         time.sleep(defs.speed)
         defs.board_start+=1
+        defs.enemyrelpos-=2
         main_rider.move('s')
         main_rider.move('a',True)
         if main_rider.check_pos() == 1:
@@ -135,7 +145,7 @@ if __name__=="__main__":
             elif chbuff == 'j':
                 # print(main_rider.xpos_left,main_rider.ypos_top)
                 bullet.Bullet(main_rider.xpos_left+defs.board_start+len(main_rider.rider[0]),\
-                    main_rider.ypos_top,defs.board_len)
+                    main_rider.ypos_top,2*int(defs.columns))
             elif chbuff == ' ':
                 main_rider.sheild() 
         elif not main_rider._isSheilded:

@@ -2,19 +2,17 @@ import os
 from clouds import add_element
 from defs import reset_color,rows,columns,col_sb,col_sf
 import defs,time,threading
-from stats import Stats
 from bullet import Bullet
 
-game_stats=Stats()
 
-def gc(c="\u2588",r=0,g=0,b=0,f=1,e=1,c1="",r1=0,g1=0,b1=0):
-    ret_str = "\x1b[38;2;"+str(r)+";"+str(g)+";"+str(b)+"m"+str(c)
-    if f==0:
-        ret_str = "\x1b[38;2;"+str(r)+";"+str(g)+";"+str(b)+"m"+str(c1)
-        ret_str += "\x1b[48;2;"+str(r1)+";"+str(g1)+";"+str(b1)+"m"+str(c)
-    if e==1:
-        ret_str+=reset_color
-    return ret_str
+# def gc(c="\u2588",r=0,g=0,b=0,f=1,e=1,c1="",r1=0,g1=0,b1=0):
+#     ret_str = "\x1b[38;2;"+str(r)+";"+str(g)+";"+str(b)+"m"+str(c)
+#     if f==0:
+#         ret_str = "\x1b[38;2;"+str(r)+";"+str(g)+";"+str(b)+"m"+str(c1)
+#         ret_str += "\x1b[48;2;"+str(r1)+";"+str(g1)+";"+str(b1)+"m"+str(c)
+#     if e==1:
+#         ret_str+=reset_color
+#     return ret_str
 
 class Rider:
     rider = [
@@ -126,23 +124,23 @@ class Rider:
 
     def move(self,chbuff,x=False):
         if chbuff == 'w':
-            self.ypos_top -= int(4*(defs.def_speed//defs.speed))
+            self.ypos_top -= int(4*1)
             if self.ypos_top<-1:
                 self.ypos_top=-1
             if not self._isSheilded:    
                 self.change_rider(1)
         elif chbuff == 's':
-            self.ypos_top += int(2*(defs.def_speed//defs.speed))
+            self.ypos_top += int(2*1)
             if self.ypos_top>int(rows)-1-len(self.rider):
                 self.ypos_top=int(rows)-1-len(self.rider)
         elif chbuff == 'a':
-            self.xpos_left -= int(1*(defs.def_speed//defs.speed))
+            self.xpos_left -= int(1*1)
             if self.xpos_left<0:
                 self.xpos_left=0
             if x==False and not self._isSheilded:
                 self.change_rider(2)
         elif chbuff == 'd':
-            self.xpos_left += int(3*(defs.def_speed//defs.speed))
+            self.xpos_left += int(3*1)
             if self.xpos_left>int(columns)-2:
                 self.xpos_left=int(columns)-2
             if not self._isSheilded:    
@@ -165,16 +163,12 @@ class Rider:
                     defs.board_check[i][j+defs.board_start]=0
                     defs.board_check[i][j+defs.board_start-1]=0
                     defs.board_check[i][j+defs.board_start+1]=0
-                    game_stats.incrCoins()
+                    defs.coinsCollected+=1
                     return 2
                 if defs.board_check[i][j+defs.board_start] == 5:
                     defs.board_check[i][j+defs.board_start]=0
-                    defs.speed/=1.5
-                    return 2
-
-    def return_coins(self):
-        return game_stats.coinsCollected
-
+                    defs.speed/=2
+                    return 5
 
     def print_rider(self):
         for i in self.rider:
