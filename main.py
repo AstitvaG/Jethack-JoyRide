@@ -1,4 +1,4 @@
-import os, time, threading, _thread
+import os, time, threading, _thread,math
 from clouds import fill_in_clouds,small_cloud,large_cloud,add_element
 from rider import Rider
 from input import input_to, Get
@@ -7,6 +7,8 @@ from arcs import fill_in_art
 from defs import rows,columns,fg,bg,reset_color,board_len
 from coins import fill_in_coins
 import defs,copy,bullet,stats,powerup
+
+start_time = time.time()
 
 
 def print_board(board_start):
@@ -52,7 +54,8 @@ def print_board(board_start):
     
     print(reset_color+str(main_rider.xpos_left)+'/'+defs.columns,\
         str(main_rider.ypos_top)+'/'+defs.rows+reset_color,\
-        main_rider.return_coins(),(defs.board_start+main_rider.xpos_left+2))
+        main_rider.return_coins(),(defs.board_start+main_rider.xpos_left+2),
+        math.floor(time.time()-start_time))
 
 
 
@@ -73,10 +76,10 @@ def create_board():
     fill_in_clouds(board,30,small_cloud)
     fill_in_clouds(board,100,large_cloud)
     defs.plain_board=copy.deepcopy(board)
-    for i in range(2,board_len//100):
+    for i in range(board_len//(2*int(rows)//3+1)):
         val=sample(range(1,5),2)
-        fill_in_art(board,val[0],i,int(columns)//3)
-        fill_in_art(board,val[1],i,int(columns)//3)
+        fill_in_art(board,val[0],2*int(rows)//3+1,i)
+        fill_in_art(board,val[1],2*int(rows)//3+1,i)
     fill_in_coins(board,100)
     powerup.Powerup(defs.board_len//5)
     return board
