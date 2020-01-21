@@ -152,11 +152,11 @@ class Rider:
         a = defs.board_check[posy][posx]
         if a in [10,16,19,21,24]:
             self.move('d',val=1)
-        elif a in [12,18,20,22,25]:
+        if a in [12,18,20,22,25]:
             self.move('a',val=1)
-        elif a in [10,12,19,20,23]:
+        if a in [10,12,19,20,23]:
             self.move('s',val=1)
-        elif a in [16,18,21,22,26]:
+        if a in [16,18,21,22,26]:
             self.move('w',val=2)
 
     def check_pos(self):

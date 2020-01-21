@@ -7,9 +7,9 @@ class Enemy:
         for i in range(defs.board_len//freq):
             posx = randint(6,freq-6)
             posy = int(defs.rows)-4
-            defs.board_check[posy][posx+i*freq]=6
+            defs.board_check[posy][posx+i*freq]=8
             defs.board_check[posy+1][posx+i*freq]=7
-            defs.board_check[posy+2][posx+i*freq]=8
+            defs.board_check[posy+2][posx+i*freq]=6
     @staticmethod
     def fill_in(val):
         r=str(randint(0,255))
@@ -21,4 +21,4 @@ class Enemy:
             ['\x1b[38;2;'+r+';'+g+';'+b+'m', '', '█', defs.bg+defs.fg, -1],
             ['\x1b[38;2;0;0;0m', '\x1b[48;2;105;105;105m', '▋', defs.bg+defs.fg, 1]
         ]
-        return enemy[val-6]
+        return enemy[8-val]

@@ -30,9 +30,9 @@ class Bullet:
                 defs.enemiesKilled+=1
                 self.clearArcs(self.posx-defs.enemyrelpos,self.posy,6)
                 break
-            if defs.board_check[self.posy][self.posx-defs.enemyrelpos+1] ==6:
+            if defs.board_check[self.posy][self.posx-defs.enemyrelpos+1] == 8:
                 defs.enemiesKilled+=1
-                self.clearArcs(self.posx-defs.enemyrelpos+1,self.posy,6)
+                self.clearArcs(self.posx-defs.enemyrelpos+1,self.posy,8)
                 break
             if defs.board_check[self.posy][self.posx] == 1:
                 self.clearArcs(self.posx,self.posy)
@@ -55,28 +55,28 @@ class Bullet:
             if defs.board_check[y][x]==0:
                 continue
             defs.board_check[y][x]=0
-            if(defs.board_check[y-1][x]>=val):
+            if(defs.board_check[y-1][x]<=val):
                 q1.append(x)
                 q2.append(y-1)
-            if(defs.board_check[y+1][x]>=val):
+            if(defs.board_check[y+1][x]<=val):
                 q1.append(x)
                 q2.append(y+1)
-            if(defs.board_check[y][x-1]>=val):
+            if(defs.board_check[y][x-1]<=val):
                 q1.append(x-1)
                 q2.append(y)
-            if(defs.board_check[y][x+1]>=val):
+            if(defs.board_check[y][x+1]<=val):
                 q1.append(x+1)
                 q2.append(y)
-            if(defs.board_check[y+1][x+1]>=val):
+            if(defs.board_check[y+1][x+1]<=val):
                 q1.append(x+1)
                 q2.append(y+1)
-            if(defs.board_check[y+1][x-1]>=val):
+            if(defs.board_check[y+1][x-1]<=val):
                 q1.append(x-1)
                 q2.append(y+1)
-            if(defs.board_check[y-1][x+1]>=val):
+            if(defs.board_check[y-1][x+1]<=val):
                 q1.append(x+1)
                 q2.append(y-1)
-            if(defs.board_check[y-1][x-1]>=val):
+            if(defs.board_check[y-1][x-1]<=val):
                 q1.append(x-1)
                 q2.append(y-1)
 

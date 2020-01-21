@@ -52,8 +52,17 @@ def print_board(board_start):
             elif defs.board_check[i][j+board_start]==5:
                 b = powerup.Powerup.fill_in()
                 print(b[0]+b[1]+b[2]+b[3],end="")
-            elif defs.board_check[i][j+board_start]==20:
+            elif defs.board_check[i][j+board_start]==19:
                 val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'#'+defs.bg+defs.fg
+                print(val,end="")
+            elif defs.board_check[i][j+board_start]==20:
+                val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'&'+defs.bg+defs.fg
+                print(val,end="")
+            elif defs.board_check[i][j+board_start]==21:
+                val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'@'+defs.bg+defs.fg
+                print(val,end="")
+            elif defs.board_check[i][j+board_start]==22:
+                val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'%'+defs.bg+defs.fg
                 print(val,end="")
             else:
                 for x in board[i][j+board_start]:
@@ -90,18 +99,18 @@ def create_board():
     fill_in_clouds(board,30,small_cloud)
     fill_in_clouds(board,100,large_cloud)
     defs.plain_board=copy.deepcopy(board)
-    for i in range(2,board_len//(4*int(rows)//3+1)):
+    for i in range(2,board_len//(2*int(rows)//3+1)):
         val=sample(range(1,5),2)
         try:
-            fill_in_art(board,val[0],4*int(rows)//3+1,i)
+            fill_in_art(board,val[0],2*int(rows)//3+1,i)
         except:pass
         try:
-            fill_in_art(board,val[1],4*int(rows)//3+1,i)
+            fill_in_art(board,val[1],2*int(rows)//3+1,i)
         except:pass
     fill_in_coins(board,100)
     powerup.Powerup(defs.board_len//5)
     enemy.Enemy(40)
-    magnet.Magnet(100,5)
+    magnet.Magnet(200,10)
     return board
 
 def create_check():
