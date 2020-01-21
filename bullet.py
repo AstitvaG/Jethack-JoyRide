@@ -16,10 +16,13 @@ class Bullet:
         defs.board_check[starty][startx] = 9
         threadx = threading.Thread(target=self.change_val, daemon=True)
         threadx.start()
-        
+    __savetemp = -1  
     def change_val(self):
         while(self.posx-self.strt_posx<self.rangex):
-            defs.board_check[self.posy][self.posx] = 0
+            if self.__savetemp==-1:
+                defs.board_check[self.posy][self.posx] = 0
+            else:
+                defs.board_check[self.posy][self.posx] = self.__savetemp
             self.posx+=1
             if self.posx>defs.board_len-1 or self.posy==0:
                 break
@@ -27,13 +30,19 @@ class Bullet:
                 defs.enemiesKilled+=1
                 self.clearArcs(self.posx-defs.enemyrelpos,self.posy,6)
                 break
+            if defs.board_check[self.posy][self.posx-defs.enemyrelpos+1] ==6:
+                defs.enemiesKilled+=1
+                self.clearArcs(self.posx-defs.enemyrelpos+1,self.posy,6)
+                break
             if defs.board_check[self.posy][self.posx] == 1:
                 self.clearArcs(self.posx,self.posy)
                 break
+            self.__savetemp = defs.board_check[self.posy][self.posx]
             defs.board_check[self.posy][self.posx] = 9
             time.sleep(defs.speed/6)
         else:
             defs.board_check[self.posy][self.posx] = 0
+            
     @staticmethod
     def clearArcs(posx,posy,val=1):
         q1 = list()

@@ -122,32 +122,43 @@ class Rider:
         self.art_areay=range(self.ypos_top,self.ypos_top+len(self.rider))
         # self.print_rider()
 
-    def move(self,chbuff,x=False):
+    def move(self,chbuff,x=False,val=-1):
         if chbuff == 'w':
-            self.ypos_top -= int(4*1)
+            self.ypos_top -= 4 if (val==-1) else val
             if self.ypos_top<-1:
                 self.ypos_top=-1
             if not self._isSheilded:    
                 self.change_rider(1)
         elif chbuff == 's':
-            self.ypos_top += int(2*1)
+            self.ypos_top += 2 if val==-1 else val
             if self.ypos_top>int(rows)-1-len(self.rider):
                 self.ypos_top=int(rows)-1-len(self.rider)
         elif chbuff == 'a':
-            self.xpos_left -= int(1*1)
+            self.xpos_left -= 1 if val==-1 else val
             if self.xpos_left<0:
                 self.xpos_left=0
             if x==False and not self._isSheilded:
                 self.change_rider(2)
         elif chbuff == 'd':
-            self.xpos_left += int(3*1)
+            self.xpos_left += 3 if val==-1 else val
             if self.xpos_left>int(columns)-2:
                 self.xpos_left=int(columns)-2
             if not self._isSheilded:    
                 self.change_rider(1)
         self.art_areax=range(self.xpos_left,self.xpos_left+len(self.rider[0]))
         self.art_areay=range(self.ypos_top,self.ypos_top+len(self.rider))
-       
+    
+    def mgcheck_pos(self,posx,posy):
+        a = defs.board_check[posy][posx]
+        if a in [10,16,19,21,24]:
+            self.move('d',val=1)
+        elif a in [12,18,20,22,25]:
+            self.move('a',val=1)
+        elif a in [10,12,19,20,23]:
+            self.move('s',val=1)
+        elif a in [16,18,21,22,26]:
+            self.move('w',val=2)
+
     def check_pos(self):
         for i in self.art_areay:
             for j in self.art_areax:
@@ -169,6 +180,7 @@ class Rider:
                     defs.board_check[i][j+defs.board_start]=0
                     defs.speed/=2
                     return 5
+        self.mgcheck_pos(self.art_areax[0]+defs.board_start,self.art_areay[0])
 
     def print_rider(self):
         for i in self.rider:

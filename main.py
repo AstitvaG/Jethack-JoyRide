@@ -6,7 +6,7 @@ from random import sample
 from arcs import fill_in_art
 from defs import rows,columns,fg,bg,reset_color,board_len
 from coins import fill_in_coins
-import defs,copy,bullet,powerup,enemy
+import defs,copy,bullet,powerup,enemy,magnet
 
 start_time = time.time()
 
@@ -35,6 +35,13 @@ def print_board(board_start):
             defs.board_check[i][j+board_start-defs.enemyrelpos] in [6,7,8]:
                 b = enemy.Enemy.fill_in(defs.board_check[i][j+board_start-defs.enemyrelpos])
                 print(b[0]+b[1]+b[2]+b[3],end="")
+            elif defs.board_check[i][j+board_start] in range(10,19):
+                b = magnet.Magnet.fill_in(defs.board_check[i][j+board_start])
+                if b[4]==-1:
+                    val = b[0]+defs.board[i][j+board_start][1]+b[2]+b[3]
+                else:
+                    val=b[0]+b[1]+b[2]+b[3]
+                print(val,end="")
             elif defs.board_check[i][j+board_start]==0:
                 for x in defs.plain_board[i][j+board_start]:
                     val+=x
@@ -45,6 +52,9 @@ def print_board(board_start):
             elif defs.board_check[i][j+board_start]==5:
                 b = powerup.Powerup.fill_in()
                 print(b[0]+b[1]+b[2]+b[3],end="")
+            elif defs.board_check[i][j+board_start]==20:
+                val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'#'+defs.bg+defs.fg
+                print(val,end="")
             else:
                 for x in board[i][j+board_start]:
                     val+=x
@@ -80,17 +90,18 @@ def create_board():
     fill_in_clouds(board,30,small_cloud)
     fill_in_clouds(board,100,large_cloud)
     defs.plain_board=copy.deepcopy(board)
-    for i in range(2,board_len//(2*int(rows)//3+1)):
+    for i in range(2,board_len//(4*int(rows)//3+1)):
         val=sample(range(1,5),2)
         try:
-            fill_in_art(board,val[0],2*int(rows)//3+1,i)
+            fill_in_art(board,val[0],4*int(rows)//3+1,i)
         except:pass
         try:
-            fill_in_art(board,val[1],2*int(rows)//3+1,i)
+            fill_in_art(board,val[1],4*int(rows)//3+1,i)
         except:pass
     fill_in_coins(board,100)
     powerup.Powerup(defs.board_len//5)
     enemy.Enemy(40)
+    magnet.Magnet(100,5)
     return board
 
 def create_check():
