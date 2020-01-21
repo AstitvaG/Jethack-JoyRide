@@ -19,7 +19,7 @@ class Bullet:
     __savetemp = -1  
     def change_val(self):
         while(self.posx-self.strt_posx<self.rangex):
-            if self.__savetemp==-1:
+            if self.__savetemp==-1 or self.__savetemp==9:
                 defs.board_check[self.posy][self.posx] = 0
             else:
                 defs.board_check[self.posy][self.posx] = self.__savetemp

@@ -52,18 +52,18 @@ def print_board(board_start):
             elif defs.board_check[i][j+board_start]==5:
                 b = powerup.Powerup.fill_in()
                 print(b[0]+b[1]+b[2]+b[3],end="")
-            elif defs.board_check[i][j+board_start]==19:
-                val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'#'+defs.bg+defs.fg
-                print(val,end="")
-            elif defs.board_check[i][j+board_start]==20:
-                val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'&'+defs.bg+defs.fg
-                print(val,end="")
-            elif defs.board_check[i][j+board_start]==21:
-                val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'@'+defs.bg+defs.fg
-                print(val,end="")
-            elif defs.board_check[i][j+board_start]==22:
-                val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'%'+defs.bg+defs.fg
-                print(val,end="")
+            # elif defs.board_check[i][j+board_start]==19:
+            #     val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'#'+defs.bg+defs.fg
+            #     print(val,end="")
+            # elif defs.board_check[i][j+board_start]==20:
+            #     val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'&'+defs.bg+defs.fg
+            #     print(val,end="")
+            # elif defs.board_check[i][j+board_start]==21:
+            #     val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'@'+defs.bg+defs.fg
+            #     print(val,end="")
+            # elif defs.board_check[i][j+board_start]==22:
+            #     val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'%'+defs.bg+defs.fg
+            #     print(val,end="")
             else:
                 for x in board[i][j+board_start]:
                     val+=x
