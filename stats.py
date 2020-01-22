@@ -36,22 +36,3 @@ class Stats:
                 else:
                     temp.append(['',wb,' ',defs.reset_color])
             Stats.score_board.append(temp)
-
-
-# for y in stats.score_board:
-#     temp=[]
-#     for x in y:
-#         val=''
-#         for p in x:
-#             val+=p
-#         print(val,end='')
-#     print(defs.reset_color)
-# print(defs.reset_color)
-# print('score_boad = [')
-# for y in stats.score_board:
-#     print("\t[")
-#     for x in y:
-#         print("\t\t",x)
-#     print("\n\t]")
-# print(']')
-# # print("\033[valy-1;valy-2f"+"haha",end='')

@@ -6,9 +6,9 @@ from random import sample
 from arcs import fill_in_art
 from defs import rows,columns,fg,bg,reset_color,board_len
 from coins import fill_in_coins
-import defs,copy,bullet,powerup,enemy,magnet,stats
+import defs,copy,bullet,powerup,enemy,magnet,stats,coins
+from subprocess import call
 
-start_time = time.time()
 def print_board(board_start):
     board=defs.board
     print("",end="\033[0;0f")
@@ -74,14 +74,25 @@ def print_board(board_start):
     print(reset_color,end="",flush=True)
     if not defs.oncePrinted:
         defs.oncePrinted=True
-    # print("",end="\033[0;0f")
-    
-    # print(reset_color,"Coins collected :",defs.coinsCollected,\
-    #     "\tEnemies killed :",defs.enemiesKilled,\
-    #     "\tBullets fired :",defs.bulletsFired,\
-    #     "\tTime :",math.floor(time.time()-start_time),\
-    #     "\tLives :",defs.livesleft,defs.dragonlivesleft,defs.speed)
+    print_values()
 
+
+def print_values():
+    pos1x = int(defs.columns)//2-(3*stats.valx)//8
+    pos1y = 4
+    print("",end="\033["+str(pos1y)+";"+str(pos1x)+"f"+stats.wb+stats.bf)
+    print("Lives:",defs.livesleft,end='')
+    pos1y+=2
+    print("",end="\033["+str(pos1y)+";"+str(pos1x)+"f"+stats.wb+stats.bf)
+    print("Time left:",defs.total_time-int(time.time()-defs.start_time),end='  ')
+    pos1x = int(defs.columns)//2+(stats.valx)//8
+    pos1y = 4
+    print("",end="\033["+str(pos1y)+";"+str(pos1x)+"f"+stats.wb+stats.bf)
+    print(coins.col_gf+"⬤"+stats.bf+" x"+str(defs.coinsCollected)+"  E x"+str(defs.enemiesKilled),end='')
+    pos1y+=2
+    print("",end="\033["+str(pos1y)+";"+str(pos1x)+"f"+stats.wb+stats.bf)
+    print("Score:",defs.coinsCollected+2*defs.enemiesKilled,end='')
+    print("",end=defs.reset_color+"\033[0;0f",flush=True)
 
 
 
@@ -90,19 +101,18 @@ def create_board():
     for i in range(int(rows)):
         temp_list = list()
         for _ in range(board_len):
-            if(i==0):
+            if i==0 or i==0:
                 add_element(temp_list,fn=34)
-            elif(i==1):
-                add_element(temp_list,fn=34)
-            elif(i==int(rows)-1):
+            elif i==int(rows)-1 :
                 add_element(temp_list,fn=32)
             else:
                 add_element(temp_list,cont=1)
         board.append(temp_list)
+    defs.board_len-=int(defs.columns)
     fill_in_clouds(board,30,small_cloud)
     fill_in_clouds(board,100,large_cloud)
     defs.plain_board=copy.deepcopy(board)
-    for i in range(2,board_len//(2*int(rows)//3+1)):
+    for i in range(2,defs.board_len//(2*int(rows)//3+1)):
         val=sample(range(1,5),2)
         try:
             fill_in_art(board,val[0],2*int(rows)//3+1,i)
@@ -114,6 +124,7 @@ def create_board():
     powerup.Powerup(defs.board_len//5)
     enemy.Enemy(40)
     magnet.Magnet(200,10)
+    defs.board_len+=int(defs.columns)
     return board
 
 def create_check():
@@ -128,7 +139,9 @@ def create_check():
 
 
 def increase_strt(stop):
-    board_start = time.time()
+    defs.start_time=time.time()
+    board_time = time.time()
+    grav_time = time.time()
     while defs.board_start+int(columns)<=board_len and\
     defs.dragonlivesleft>=0 and defs.livesleft>=0:
         print_board(defs.board_start)
@@ -137,13 +150,13 @@ def increase_strt(stop):
         defs.enemyrelpos-=2
         main_rider.move('a',True)
         main_rider.move('s',val=defs.down)
-        defs.down+=1
-        if stop():
-            print("\033[2J",end="")
-            _thread.interrupt_main()
-        if time.time()-board_start>40:
+        if time.time()-grav_time >defs.def_speed:
+            defs.down+=1
+            grav_time=time.time()
+        if time.time()-board_time>40:
             defs.speed=round(defs.speed*0.8,4)
-            board_start=time.time()
+            board_time=time.time()
+    defs.isbossfight=True
 
 if __name__=="__main__":
     main_rider = Rider()
@@ -158,7 +171,7 @@ if __name__=="__main__":
     stop_threads = False
     thread1 = threading.Thread(target=increase_strt, daemon=True, args =(lambda : stop_threads, ))
     thread1.start()
-    while defs.dragonlivesleft>=0 and defs.livesleft>=0:
+    while defs.dragonlivesleft>=0 and defs.livesleft>=0 and not defs.isbossfight:
         getch = Get()
         chbuff = input_to(getch)
         if chbuff:
@@ -180,3 +193,5 @@ if __name__=="__main__":
         elif not main_rider._isSheilded:
             main_rider.change_rider(0)
         main_rider.check_pos()
+    print("",end=defs.reset_color+"\033[0;0f")
+    call(["python3", "bossfight.py"])

@@ -68,30 +68,46 @@ class Bullet:
             if defs.board_check[y][x]==0:
                 continue
             defs.board_check[y][x]=0
-            if(defs.board_check[y-1][x]<=val):
-                q1.append(x)
-                q2.append(y-1)
-            if(defs.board_check[y+1][x]<=val):
-                q1.append(x)
-                q2.append(y+1)
-            if(defs.board_check[y][x-1]<=val):
-                q1.append(x-1)
-                q2.append(y)
-            if(defs.board_check[y][x+1]<=val):
-                q1.append(x+1)
-                q2.append(y)
-            if(defs.board_check[y+1][x+1]<=val):
-                q1.append(x+1)
-                q2.append(y+1)
-            if(defs.board_check[y+1][x-1]<=val):
-                q1.append(x-1)
-                q2.append(y+1)
-            if(defs.board_check[y-1][x+1]<=val):
-                q1.append(x+1)
-                q2.append(y-1)
-            if(defs.board_check[y-1][x-1]<=val):
-                q1.append(x-1)
-                q2.append(y-1)
+            try:
+                if(defs.board_check[y-1][x]<=val):
+                    q1.append(x)
+                    q2.append(y-1)
+            except: pass
+            try:
+                if(defs.board_check[y+1][x]<=val):
+                    q1.append(x)
+                    q2.append(y+1)
+            except: pass
+            try:
+                if(defs.board_check[y][x-1]<=val):
+                    q1.append(x-1)
+                    q2.append(y)
+            except: pass
+            try:
+                if(defs.board_check[y][x+1]<=val):
+                    q1.append(x+1)
+                    q2.append(y)
+            except: pass
+            try:
+                if(defs.board_check[y+1][x+1]<=val):
+                    q1.append(x+1)
+                    q2.append(y+1)
+            except: pass
+            try:
+                if(defs.board_check[y+1][x-1]<=val):
+                    q1.append(x-1)
+                    q2.append(y+1)
+            except: pass
+            try:
+                if(defs.board_check[y-1][x+1]<=val):
+                    q1.append(x+1)
+                    q2.append(y-1)
+            except: pass
+            try:
+                if(defs.board_check[y-1][x-1]<=val):
+                    q1.append(x-1)
+                    q2.append(y-1)
+            except: pass
         if boss == True:
             defs.dragonlivesleft-=1
         # pass
@@ -99,6 +115,6 @@ class Bullet:
     @staticmethod
     def fill_in(val):
         if val==9:
-            return ['\x1B[30m','','🡆',defs.fg+defs.bg]
+            return ['\x1B[38;2;136;136;136m','','🡆',defs.fg+defs.bg]
         else:
             return ['\x1b[38;2;255;165;0m','','█',defs.fg+defs.bg]

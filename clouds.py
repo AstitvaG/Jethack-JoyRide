@@ -1,13 +1,13 @@
 from random import randint
 import os,defs
-from defs import block,board_len,rows
+from defs import block,rows
 
 def add_element(temp_list=None,cont=-1,fn=-1,bn=-1,r1=0,g1=0,b1=0,bx=-1,r2=0,g2=0,b2=0,element=block,end=""):
     """
     fg in rgb: just put r1,g1,b1\n
     else : put value of fn\n
     bg in rgb: just put r2,g2,b2 as well as bx=1\n
-    bg in rgb: to copy fg in rgb : bx=0
+    bg in rgb: to copy fg in rgb : bx=0\n
     else : just put bn
     """
     f=False
@@ -62,7 +62,7 @@ small_cloud = [[0,0,0,1,1,1,0,0],
                [1,1,1,1,1,1,1,1]]
 
 def fill_in_clouds(board,freq,art):
-    for p in range(board_len//freq):
+    for p in range(defs.board_len//freq):
         startx=randint(3,freq-3-len(art[0]))+p*freq
         starty=randint(3,int(rows)-3-len(art))
         i=0

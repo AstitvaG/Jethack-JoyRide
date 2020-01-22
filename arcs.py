@@ -1,6 +1,5 @@
 from random import randint
 import os
-from clouds import board_len
 from rider import Rider
 from defs import rows,fg,bg,reset_color
 import defs
