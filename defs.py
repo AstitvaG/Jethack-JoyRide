@@ -20,3 +20,4 @@ isbossfight = False
 livesleft = 3
 dragonlivesleft = 5
 down=0
+oncePrinted=False

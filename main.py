@@ -6,18 +6,29 @@ from random import sample
 from arcs import fill_in_art
 from defs import rows,columns,fg,bg,reset_color,board_len
 from coins import fill_in_coins
-import defs,copy,bullet,powerup,enemy,magnet
+import defs,copy,bullet,powerup,enemy,magnet,stats
 
 start_time = time.time()
-
-
 def print_board(board_start):
     board=defs.board
     print("",end="\033[0;0f")
     for i in range(int(rows)):
         for j in range(int(columns)):
             val=""
-            if (i in main_rider.art_areay) and (j in main_rider.art_areax):
+            if (i in stats.Stats.rangey) and (j in stats.Stats.rangex):
+                if defs.oncePrinted:
+                    print("\033[1C",end='')
+                    continue
+                else:
+                    ix=stats.Stats.rangey.index(i)
+                    iy=stats.Stats.rangex.index(j)
+                    val = stats.Stats.score_board[ix][iy][0]\
+                            +stats.Stats.score_board[ix][iy][1]\
+                            +stats.Stats.score_board[ix][iy][2]\
+                            +stats.Stats.score_board[ix][iy][3]
+                    val+=bg+fg
+                    print(val,end="")
+            elif (i in main_rider.art_areay) and (j in main_rider.art_areax):
                 ix=main_rider.art_areay.index(i)
                 iy=main_rider.art_areax.index(j)
                 if main_rider.rider[ix][iy][4] == 1:
@@ -61,13 +72,15 @@ def print_board(board_start):
         else:
             print("",end="")
     print(reset_color,end="",flush=True)
-    print("",end="\033[0;0f")
+    if not defs.oncePrinted:
+        defs.oncePrinted=True
+    # print("",end="\033[0;0f")
     
-    print(reset_color,"Coins collected :",defs.coinsCollected,\
-        "\tEnemies killed :",defs.enemiesKilled,\
-        "\tBullets fired :",defs.bulletsFired,\
-        "\tTime :",math.floor(time.time()-start_time),\
-        "\tLives :",defs.livesleft,defs.dragonlivesleft,defs.speed)
+    # print(reset_color,"Coins collected :",defs.coinsCollected,\
+    #     "\tEnemies killed :",defs.enemiesKilled,\
+    #     "\tBullets fired :",defs.bulletsFired,\
+    #     "\tTime :",math.floor(time.time()-start_time),\
+    #     "\tLives :",defs.livesleft,defs.dragonlivesleft,defs.speed)
 
 
 
@@ -136,6 +149,7 @@ if __name__=="__main__":
     main_rider = Rider()
     defs.board_check = create_check()
     defs.board = create_board()
+    stats.Stats.create_board()
     for i in range(int(rows)):
         defs.board[i][board_len-1]=add_element(fn=33,end=fg+bg)
         defs.board[i][board_len-10]=add_element(fn=33,end=fg+bg)
