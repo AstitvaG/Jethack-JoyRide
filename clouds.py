@@ -71,3 +71,7 @@ def fill_in_clouds(board,freq,art):
             for j in range(len(art[0])):
                 if art[i][j]==1:
                     board[starty+i][startx+j]=add_element(fn=37,end=defs.bg+defs.fg)
+
+def fill_in(board,freq):
+    fill_in_clouds(board,int(0.4*freq),small_cloud)
+    fill_in_clouds(board,freq,large_cloud)

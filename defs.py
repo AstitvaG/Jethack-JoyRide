@@ -24,3 +24,4 @@ dragonlivesleft = 5
 down=0
 start_time=-5
 oncePrinted=False
+main_rider=0

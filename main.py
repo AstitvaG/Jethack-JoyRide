@@ -1,83 +1,81 @@
 import os, time, threading, _thread,math
-from clouds import fill_in_clouds,small_cloud,large_cloud,add_element
-from rider import Rider
 from input import input_to, Get
 from random import sample
 from arcs import fill_in_art
 from defs import rows,columns,fg,bg,reset_color,board_len
 from coins import fill_in_coins
-import defs,copy,bullet,powerup,enemy,magnet,stats,coins
+import defs,copy,bullet,powerup,enemy,magnet,stats,coins,inp,rider,clouds
 from subprocess import call
 
-def print_board(board_start):
-    board=defs.board
+def print_board():
+    '''
+    Print the whole completely again and again 
+    '''
+
+    k=defs.board_start
     print("",end="\033[0;0f")
     for i in range(int(rows)):
         for j in range(int(columns)):
             val=""
+            
+            # Stats
             if (i in stats.Stats.rangey) and (j in stats.Stats.rangex):
-                if defs.oncePrinted:
-                    print("\033[1C",end='')
-                    continue
-                else:
-                    ix=stats.Stats.rangey.index(i)
-                    iy=stats.Stats.rangex.index(j)
-                    val = stats.Stats.score_board[ix][iy][0]\
-                            +stats.Stats.score_board[ix][iy][1]\
-                            +stats.Stats.score_board[ix][iy][2]\
-                            +stats.Stats.score_board[ix][iy][3]
-                    val+=bg+fg
-                    print(val,end="")
-            elif (i in main_rider.art_areay) and (j in main_rider.art_areax):
-                ix=main_rider.art_areay.index(i)
-                iy=main_rider.art_areax.index(j)
-                if main_rider.rider[ix][iy][4] == 1:
-                    for x in main_rider.rider[ix][iy]:
+                stats.Stats.print_f(i,j)
+            
+            # Rider
+            elif (i in defs.main_rider.art_areay) and (j in defs.main_rider.art_areax):
+                ix=defs.main_rider.art_areay.index(i)
+                iy=defs.main_rider.art_areax.index(j)
+                if defs.main_rider.rider[ix][iy][4] == 1:
+                    for x in defs.main_rider.rider[ix][iy]:
                         if(type(x)!=int):
                             val+=x
                 else:
-                    val = main_rider.rider[ix][iy][0]\
-                            +defs.plain_board[i][j+board_start][1]\
-                            +main_rider.rider[ix][iy][2]\
-                            +main_rider.rider[ix][iy][3]
+                    val = defs.main_rider.rider[ix][iy][0]\
+                            +defs.plain_board[i][j+defs.board_start][1]\
+                            +defs.main_rider.rider[ix][iy][2]\
+                            +defs.main_rider.rider[ix][iy][3]
                 val+=bg+fg
                 print(val,end="")
-            elif j+board_start-defs.enemyrelpos<defs.board_len-1 and\
-            defs.board_check[i][j+board_start-defs.enemyrelpos] in [6,7,8]:
-                b = enemy.Enemy.fill_in(defs.board_check[i][j+board_start-defs.enemyrelpos])
-                print(b[0]+b[1]+b[2]+b[3],end="")
-            elif defs.board_check[i][j+board_start] in range(10,19):
-                b = magnet.Magnet.fill_in(defs.board_check[i][j+board_start])
-                if b[4]==-1:
-                    val = b[0]+defs.plain_board[i][j+board_start][1]+b[2]+b[3]
-                else:
-                    val=b[0]+b[1]+b[2]+b[3]
-                print(val,end="")
-            elif defs.board_check[i][j+board_start]==0:
-                for x in defs.plain_board[i][j+board_start]:
+            
+            #Enemy
+            elif enemy.Enemy.check_x(i,j+k):
+                enemy.Enemy.print_f(i,j+k)
+            
+            # Magnets
+            elif magnet.Magnet.check_x(i,j+k):
+                magnet.Magnet.print_f(i,j+k)
+            
+            # Already empty or that made empty later
+            elif defs.board_check[i][j+k]==0:
+                for x in defs.plain_board[i][j+k]:
                     val+=x
                 print(val,end="")
-            elif defs.board_check[i][j+board_start] in [9,30]:
-                b = bullet.Bullet.fill_in(defs.board_check[i][j+board_start])
-                print(b[0]+defs.plain_board[i][j+board_start][1]+b[2]+b[3],end="")
-            elif defs.board_check[i][j+board_start]==5:
-                b = powerup.Powerup.fill_in()
-                print(b[0]+b[1]+b[2]+b[3],end="")
+            
+            # Bullets
+            elif bullet.Bullet.check_x(i,j+k):
+                bullet.Bullet.print_f(i,j+k)
+            
+            # Powerups
+            elif powerup.Powerup.check_x(i,j+k):
+                powerup.Powerup.print_f(i,j)
+            
+            # Prefilled values: Clouds, Arcs etc
             else:
-                for x in board[i][j+board_start]:
+                for x in defs.board[i][j+defs.board_start]:
                     val+=x
                 print(val,end="")
-        if i!=int(rows)-1 and j!=int(columns)-1:
-            print()
-        else:
-            print("",end="")
     print(reset_color,end="",flush=True)
+    
+    # Check if scoreboard is printed once or not 
     if not defs.oncePrinted:
         defs.oncePrinted=True
-    print_values()
+    print_sbValues()
 
-
-def print_values():
+def print_sbValues():
+    '''
+    Prints values inside the scoreboard
+    '''
     pos1x = int(defs.columns)//2-(3*stats.valx)//8
     pos1y = 4
     print("",end="\033["+str(pos1y)+";"+str(pos1x)+"f"+stats.wb+stats.bf)
@@ -94,23 +92,26 @@ def print_values():
     print("Score:",defs.coinsCollected+2*defs.enemiesKilled,end='')
     print("",end=defs.reset_color+"\033[0;0f",flush=True)
 
-
-
 def create_board():
+    '''
+    Creates board and fills in Obstacles and Scenery
+    '''
     board = list()
     for i in range(int(rows)):
         temp_list = list()
         for _ in range(board_len):
             if i==0 or i==0:
-                add_element(temp_list,fn=34)
+                clouds.add_element(temp_list,fn=34)
             elif i==int(rows)-1 :
-                add_element(temp_list,fn=32)
+                clouds.add_element(temp_list,fn=32)
             else:
-                add_element(temp_list,cont=1)
+                clouds.add_element(temp_list,cont=1)
         board.append(temp_list)
     defs.board_len-=int(defs.columns)
-    fill_in_clouds(board,30,small_cloud)
-    fill_in_clouds(board,100,large_cloud)
+
+    #Filled clouds
+    clouds.fill_in(board,100)
+    
     defs.plain_board=copy.deepcopy(board)
     for i in range(2,defs.board_len//(2*int(rows)//3+1)):
         val=sample(range(1,5),2)
@@ -138,60 +139,61 @@ def create_check():
 
 
 
-def increase_strt(stop):
+def increase_strt():
     defs.start_time=time.time()
     board_time = time.time()
     grav_time = time.time()
     while defs.board_start+int(columns)<=board_len and\
     defs.dragonlivesleft>=0 and defs.livesleft>=0:
-        print_board(defs.board_start)
+        print_board()
         time.sleep(defs.speed)
         defs.board_start+=1
         defs.enemyrelpos-=2
-        main_rider.move('a',True)
-        main_rider.move('s',val=defs.down)
+        defs.main_rider.move('a',True)
+        defs.main_rider.move('s',val=defs.down)
         if time.time()-grav_time >defs.def_speed:
             defs.down+=1
             grav_time=time.time()
         if time.time()-board_time>40:
             defs.speed=round(defs.speed*0.8,4)
             board_time=time.time()
-    defs.isbossfight=True
+    if defs.livesleft>=0:
+        defs.isbossfight=True
+
+def input_handler():
+    getch = Get()
+    chbuff = input_to(getch)
+    if chbuff:
+        if chbuff =='q':
+            defs.livesleft = -2
+            time.sleep(0.2)
+            print("\033[2J",end="")
+            exit(0)
+        elif chbuff in ['w','a','s','d']:
+            defs.main_rider.move(chbuff)
+            if chbuff=='w': defs.down=1
+            else: defs.down=1
+        elif chbuff == 'j':
+            bullet.Bullet(defs.main_rider.xpos_left+defs.board_start+len(defs.main_rider.rider[0]),\
+                defs.main_rider.ypos_top,2*int(defs.columns))
+        elif chbuff == ' ':
+            defs.main_rider.sheild() 
+    elif not defs.main_rider._isSheilded:
+        defs.main_rider.change_rider(0)
 
 if __name__=="__main__":
-    main_rider = Rider()
+    defs.main_rider = rider.Rider()
     defs.board_check = create_check()
     defs.board = create_board()
     stats.Stats.create_board()
-    for i in range(int(rows)):
-        defs.board[i][board_len-1]=add_element(fn=33,end=fg+bg)
-        defs.board[i][board_len-10]=add_element(fn=33,end=fg+bg)
-        defs.board[i][board_len-2]=add_element(fn=33,end=fg+bg)
-        defs.board[i][board_len-3]=add_element(fn=33,end=fg+bg)
-    stop_threads = False
-    thread1 = threading.Thread(target=increase_strt, daemon=True, args =(lambda : stop_threads, ))
+    thread1 = threading.Thread(target=increase_strt, daemon=True)
     thread1.start()
     while defs.dragonlivesleft>=0 and defs.livesleft>=0 and not defs.isbossfight:
-        getch = Get()
-        chbuff = input_to(getch)
-        if chbuff:
-            if chbuff =='q':
-                defs.livesleft = -2
-                time.sleep(0.2)
-                print("\033[2J",end="")
-                exit(0)
-            elif chbuff in ['w','a','s','d']:
-                main_rider.move(chbuff)
-                if chbuff=='w': defs.down=1
-                else: defs.down=1
-            elif chbuff == 'j':
-                # print(main_rider.xpos_left,main_rider.ypos_top)
-                bullet.Bullet(main_rider.xpos_left+defs.board_start+len(main_rider.rider[0]),\
-                    main_rider.ypos_top,2*int(defs.columns))
-            elif chbuff == ' ':
-                main_rider.sheild() 
-        elif not main_rider._isSheilded:
-            main_rider.change_rider(0)
-        main_rider.check_pos()
-    print("",end=defs.reset_color+"\033[0;0f")
-    call(["python3", "bossfight.py"])
+        input_handler()
+        defs.main_rider.check_pos()
+    if defs.isbossfight:
+        print("",end=defs.reset_color+"\033[0;0f")
+        call(["python3", "bossfight.py"])
+    else:
+        inp.pr_result(2)
+        print('\033['+defs.rows+';'+defs.columns+'f'+defs.reset_color)

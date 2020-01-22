@@ -36,3 +36,18 @@ class Stats:
                 else:
                     temp.append(['',wb,' ',defs.reset_color])
             Stats.score_board.append(temp)
+
+    @staticmethod
+    def print_f(i,j):
+        if defs.oncePrinted:
+            print("\033[1C",end='')
+            return
+        else:
+            ix=Stats.rangey.index(i)
+            iy=Stats.rangex.index(j)
+            val = Stats.score_board[ix][iy][0]\
+                 +Stats.score_board[ix][iy][1]\
+                 +Stats.score_board[ix][iy][2]\
+                 +Stats.score_board[ix][iy][3]
+            val+=defs.bg+defs.fg
+            print(val,end="")

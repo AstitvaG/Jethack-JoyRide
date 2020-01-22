@@ -187,25 +187,20 @@ class Rider:
                     return
         self.mgcheck_pos(self.art_areax[0]+defs.board_start,self.art_areay[0])
 
-    def print_rider(self):
-        for i in self.rider:
-            print(i)
-        for i in range(len(self.rider)):
-            for j in range(len(self.rider[0])):
-                val = ""
-                for x in self.rider[i][j]:
-                    if(type(x)!=int):
-                        val+=x
-                print(val,end="")
-            # if i!=int(rows)-1 and j!=int(columns)-1:
-            print(reset_color)
-            # else:
-            print("",end="")
-        print(reset_color,end="",flush=True)
-        print(self.art_areax)
-        print(self.art_areay)
-        for i in self.art_areay:
-            for j in self.art_areax:
-                print(reset_color,"\n",i,j+int(columns)*(defs.board_start))
+    # @staticmethod
+    # def print_f(i,j):
+    #     ix=defs.main_rider.art_areay.index(i)
+    #     iy=defs.main_rider.art_areax.index(j)
+    #     if defs.main_rider.rider[ix][iy][4] == 1:
+    #         for x in defs.main_rider.rider[ix][iy]:
+    #             if(type(x)!=int):
+    #                 val+=x
+    #     else:
+    #         val = defs.main_rider.rider[ix][iy][0]\
+    #                 +defs.plain_board[i][j+defs.board_start][1]\
+    #                 +defs.main_rider.rider[ix][iy][2]\
+    #                 +defs.main_rider.rider[ix][iy][3]
+    #     val+=defs.bg+defs.fg
+    #     print(val,end="")
 # x = Rider()
 # x.print_rider()

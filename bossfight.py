@@ -1,4 +1,4 @@
-import defs,rider,dragon,bullet,threading,time,copy,stats,coins
+import defs,rider,dragon,bullet,threading,time,copy,stats,coins,inp
 from input import input_to, Get
 from clouds import add_element
 
@@ -143,6 +143,7 @@ class BossFight:
         defs.board_start = 0
         stats.Stats.create_board()
         defs.speed=defs.def_speed
+        self.main_riderf.ypos_top=int(defs.rows)-4
         thread1 = threading.Thread(target=self.gameplay,daemon=True)
         thread1.start()
         while defs.dragonlivesleft>=0 and defs.livesleft>=0:
@@ -168,5 +169,8 @@ class BossFight:
             elif not self.main_riderf._isSheilded:
                 self.main_riderf.change_rider(0)
             self.main_riderf.check_pos()
-
+        if defs.livesleft>=0:
+            inp.pr_result(1)
+        else:
+            inp.pr_result(2)
 BossFight()

@@ -118,3 +118,12 @@ class Bullet:
             return ['\x1B[38;2;136;136;136m','','🡆',defs.fg+defs.bg]
         else:
             return ['\x1b[38;2;255;165;0m','','█',defs.fg+defs.bg]
+
+    @staticmethod
+    def check_x(i,j):
+        return defs.board_check[i][j] in [9,30]
+
+    @staticmethod
+    def print_f(i,j):
+        b = Bullet.fill_in(defs.board_check[i][j])
+        print(b[0]+defs.plain_board[i][j][1]+b[2]+b[3],end="")

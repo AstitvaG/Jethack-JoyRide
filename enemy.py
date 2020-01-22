@@ -22,3 +22,16 @@ class Enemy:
             ['\x1b[38;2;0;0;0m', '\x1b[48;2;105;105;105m', '▋', defs.bg+defs.fg, 1]
         ]
         return enemy[8-val]
+
+    @staticmethod
+    def check_x(i,j):
+        if j+defs.board_start-defs.enemyrelpos<defs.board_len-1 and\
+            defs.board_check[i][j-defs.enemyrelpos] in [6,7,8]:
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def print_f(i,j):
+        b = Enemy.fill_in(defs.board_check[i][j-defs.enemyrelpos])
+        print(b[0]+b[1]+b[2]+b[3],end="")

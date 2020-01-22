@@ -95,5 +95,16 @@ class Magnet:
             return Magnet.magnet[2][2][:5]
         elif val==18:
             return Magnet.magnet[2][4][:5]
+    
+    @staticmethod
+    def check_x(i,j):
+        return defs.board_check[i][j] in range(10,19)
 
-
+    @staticmethod
+    def print_f(i,j):
+        b = Magnet.fill_in(defs.board_check[i][j])
+        if b[4]==-1:
+            val = b[0]+defs.plain_board[i][j][1]+b[2]+b[3]
+        else:
+            val=b[0]+b[1]+b[2]+b[3]
+        print(val,end="")
