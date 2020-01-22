@@ -1,10 +1,6 @@
 import os, time, threading, _thread,math
 from input import input_to, Get
-from random import sample
-from arcs import fill_in_art
-from defs import rows,columns,fg,bg,reset_color,board_len
-from coins import fill_in_coins
-import defs,copy,bullet,powerup,enemy,magnet,stats,coins,inp,rider,clouds
+import defs,copy,bullet,powerup,enemy,magnet,stats,coins,inp,rider,clouds,arcs
 from subprocess import call
 
 def print_board():
@@ -14,8 +10,8 @@ def print_board():
 
     k=defs.board_start
     print("",end="\033[0;0f")
-    for i in range(int(rows)):
-        for j in range(int(columns)):
+    for i in range(int(defs.rows)):
+        for j in range(int(defs.columns)):
             val=""
             
             # Stats
@@ -35,7 +31,7 @@ def print_board():
                             +defs.plain_board[i][j+defs.board_start][1]\
                             +defs.main_rider.rider[ix][iy][2]\
                             +defs.main_rider.rider[ix][iy][3]
-                val+=bg+fg
+                val+=defs.bg+defs.fg
                 print(val,end="")
             
             #Enemy
@@ -65,7 +61,7 @@ def print_board():
                 for x in defs.board[i][j+defs.board_start]:
                     val+=x
                 print(val,end="")
-    print(reset_color,end="",flush=True)
+    print(defs.reset_color,end="",flush=True)
     
     # Check if scoreboard is printed once or not 
     if not defs.oncePrinted:
@@ -97,53 +93,49 @@ def create_board():
     Creates board and fills in Obstacles and Scenery
     '''
     board = list()
-    for i in range(int(rows)):
+    for i in range(int(defs.rows)):
         temp_list = list()
-        for _ in range(board_len):
+        for _ in range(defs.board_len):
             if i==0 or i==0:
                 clouds.add_element(temp_list,fn=34)
-            elif i==int(rows)-1 :
+            elif i==int(defs.rows)-1 :
                 clouds.add_element(temp_list,fn=32)
             else:
                 clouds.add_element(temp_list,cont=1)
         board.append(temp_list)
     defs.board_len-=int(defs.columns)
-
-    #Filled clouds
-    clouds.fill_in(board,100)
-    
+    #
+    clouds.fill_in(100,board)
     defs.plain_board=copy.deepcopy(board)
-    for i in range(2,defs.board_len//(2*int(rows)//3+1)):
-        val=sample(range(1,5),2)
-        try:
-            fill_in_art(board,val[0],2*int(rows)//3+1,i)
-        except:pass
-        try:
-            fill_in_art(board,val[1],2*int(rows)//3+1,i)
-        except:pass
-    fill_in_coins(board,100)
+    arcs.fill_in((2*int(defs.rows)//3+1),board)
+    coins.fill_in(100,board)
     powerup.Powerup(defs.board_len//5)
     enemy.Enemy(40)
     magnet.Magnet(200,10)
+    #
     defs.board_len+=int(defs.columns)
     return board
 
 def create_check():
+    '''
+    Creates check board initialised to zero
+    '''
     defs.board_check = list()
-    for _ in range(int(rows)):
+    for _ in range(int(defs.rows)):
         temp_list = list()
-        for _ in range(board_len):
+        for _ in range(defs.board_len):
             temp_list.append(0)
         defs.board_check.append(temp_list)
     return defs.board_check
 
-
-
 def increase_strt():
+    '''
+    Thread function responsible for iterating through the board
+    '''
     defs.start_time=time.time()
     board_time = time.time()
     grav_time = time.time()
-    while defs.board_start+int(columns)<=board_len and\
+    while defs.board_start+int(defs.columns)<=defs.board_len and\
     defs.dragonlivesleft>=0 and defs.livesleft>=0:
         print_board()
         time.sleep(defs.speed)
@@ -161,6 +153,9 @@ def increase_strt():
         defs.isbossfight=True
 
 def input_handler():
+    '''
+    Handles user input and moves the character accordingly
+    '''
     getch = Get()
     chbuff = input_to(getch)
     if chbuff:
@@ -182,6 +177,9 @@ def input_handler():
         defs.main_rider.change_rider(0)
 
 if __name__=="__main__":
+    '''
+    Main wrapper function
+    '''
     defs.main_rider = rider.Rider()
     defs.board_check = create_check()
     defs.board = create_board()

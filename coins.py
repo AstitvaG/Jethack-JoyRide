@@ -8,7 +8,7 @@ coin0 = [col_gf,'','\u25D6',defs.fg+defs.bg]
 coin1 = [col_gf,'','\u25D7',defs.fg+defs.bg]
 # print(val+defs.reset_color)
 
-def fill_in_coins(board,freq):
+def fill_in(freq,board):
     for p in range(defs.board_len//freq):
         ranx = randint(5,10)
         pos_x = sample(range(3+p*freq,freq*(p+1)-4),ranx)

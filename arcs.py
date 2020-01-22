@@ -2,7 +2,7 @@ from random import randint
 import os
 from rider import Rider
 from defs import rows,fg,bg,reset_color
-import defs
+import defs,random
 
 rows = int(rows)
 
@@ -143,3 +143,13 @@ def print_arcs():
         print(' '*j,end="")
         print(val)
     print()
+
+def fill_in(freq,board):
+    for i in range(2,defs.board_len//freq):
+        val=random.sample(range(1,5),2)
+        try:
+            fill_in_art(board,val[0],freq+1,i)
+        except:pass
+        try:
+            fill_in_art(board,val[1],freq+1,i)
+        except:pass
