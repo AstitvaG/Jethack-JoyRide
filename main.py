@@ -113,13 +113,15 @@ def create_check():
 
 
 def increase_strt(stop):
-    while(defs.board_start+int(columns)<=board_len):
+    while defs.board_start+int(columns)<=board_len and\
+    defs.dragonlivesleft>=0 and defs.livesleft>=0:
         print_board(defs.board_start)
         time.sleep(defs.speed)
         defs.board_start+=1
         defs.enemyrelpos-=2
-        main_rider.move('s')
         main_rider.move('a',True)
+        main_rider.move('s',val=defs.down)
+        defs.down+=1
         if stop():
             print("\033[2J",end="")
             _thread.interrupt_main()
@@ -141,12 +143,13 @@ if __name__=="__main__":
         chbuff = input_to(getch)
         if chbuff:
             if chbuff =='q':
-                stop_threads = True
-                thread1.join(0)
+                defs.livesleft = -2
+                time.sleep(0.2)
                 print("\033[2J",end="")
                 exit(0)
             elif chbuff in ['w','a','s','d']:
                 main_rider.move(chbuff)
+                if chbuff=='w': defs.down=0
             elif chbuff == 'j':
                 # print(main_rider.xpos_left,main_rider.ypos_top)
                 bullet.Bullet(main_rider.xpos_left+defs.board_start+len(main_rider.rider[0]),\

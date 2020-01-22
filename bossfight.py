@@ -85,15 +85,18 @@ def gameplay():
     start_time = time.time()
     while defs.dragonlivesleft>=0 and defs.livesleft>=0:
         defs.board_check = copy.deepcopy(create_check())
+        main_rider.move('s',val=defs.down)
+        main_dragon.move('s',val=defs.down)
+        defs.down+=1
         if time.time()-start_time >0.3:
             bullet.Bullet(main_dragon.xpos_left,\
-                main_rider.ypos_top,int(defs.columns),True,30)
+                main_rider.ypos_top,2*int(defs.columns),True,30)
             bullet.Bullet(main_dragon.xpos_left-10,\
-                main_rider.ypos_top,int(defs.columns),True,30)
+                main_rider.ypos_top,2*int(defs.columns),True,30)
             bullet.Bullet(main_dragon.xpos_left,\
-                main_rider.ypos_top+1,int(defs.columns),True,30)
+                main_rider.ypos_top+1,2*int(defs.columns),True,30)
             bullet.Bullet(main_dragon.xpos_left-10,\
-                main_rider.ypos_top+1,int(defs.columns),True,30)
+                main_rider.ypos_top+1,2*int(defs.columns),True,30)
             start_time = time.time()
         print_board()
         time.sleep(defs.speed)
@@ -108,11 +111,15 @@ while defs.dragonlivesleft>=0 and defs.livesleft>=0:
     getch = Get()
     chbuff = input_to(getch)
     if chbuff:
+        if chbuff !='w':
+            defs.down+=1
         if chbuff =='q':
             exit(0)
         elif chbuff in ['w','s']:
             main_rider.move(chbuff)
             main_dragon.move(chbuff)
+            if chbuff=='w':
+                defs.down=0
         elif chbuff in ['a','d']:
             main_rider.move(chbuff)
         elif chbuff == 'j':

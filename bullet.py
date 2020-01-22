@@ -51,7 +51,7 @@ class Bullet:
             if not back:
                 time.sleep(defs.speed/6)
             else:
-                time.sleep(defs.speed/15)
+                time.sleep(defs.speed/10)
         else:
             defs.board_check[self.posy][self.posx] = 0
             

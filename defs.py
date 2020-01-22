@@ -19,3 +19,4 @@ bulletsFired = 0
 isbossfight = False
 livesleft = 3
 dragonlivesleft = 5
+down=0
