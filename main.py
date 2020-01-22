@@ -31,7 +31,7 @@ def print_board(board_start):
                             +main_rider.rider[ix][iy][3]
                 val+=bg+fg
                 print(val,end="")
-            elif j+board_start-defs.enemyrelpos>0 and\
+            elif j+board_start-defs.enemyrelpos<defs.board_len-1 and\
             defs.board_check[i][j+board_start-defs.enemyrelpos] in [6,7,8]:
                 b = enemy.Enemy.fill_in(defs.board_check[i][j+board_start-defs.enemyrelpos])
                 print(b[0]+b[1]+b[2]+b[3],end="")
@@ -46,24 +46,12 @@ def print_board(board_start):
                 for x in defs.plain_board[i][j+board_start]:
                     val+=x
                 print(val,end="")
-            elif defs.board_check[i][j+board_start]==9:
-                b = bullet.Bullet.fill_in()
+            elif defs.board_check[i][j+board_start] in [9,30]:
+                b = bullet.Bullet.fill_in(defs.board_check[i][j+board_start])
                 print(b[0]+defs.plain_board[i][j+board_start][1]+b[2]+b[3],end="")
             elif defs.board_check[i][j+board_start]==5:
                 b = powerup.Powerup.fill_in()
                 print(b[0]+b[1]+b[2]+b[3],end="")
-            # elif defs.board_check[i][j+board_start]==19:
-            #     val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'#'+defs.bg+defs.fg
-            #     print(val,end="")
-            # elif defs.board_check[i][j+board_start]==20:
-            #     val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'&'+defs.bg+defs.fg
-            #     print(val,end="")
-            # elif defs.board_check[i][j+board_start]==21:
-            #     val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'@'+defs.bg+defs.fg
-            #     print(val,end="")
-            # elif defs.board_check[i][j+board_start]==22:
-            #     val+='\x1B[38;2;255;215;0m'+board[i][j+board_start][1]+'%'+defs.bg+defs.fg
-            #     print(val,end="")
             else:
                 for x in board[i][j+board_start]:
                     val+=x
@@ -78,7 +66,7 @@ def print_board(board_start):
     print(reset_color+str(main_rider.xpos_left)+'/'+defs.columns,\
         str(main_rider.ypos_top)+'/'+defs.rows+reset_color,\
         defs.coinsCollected,defs.enemiesKilled,defs.bulletsFired\
-        ,math.floor(time.time()-start_time))
+        ,math.floor(time.time()-start_time),defs.livesleft,defs.dragonlivesleft)
 
 
 
@@ -90,7 +78,7 @@ def create_board():
             if(i==0):
                 add_element(temp_list,fn=34)
             elif(i==1):
-                add_element(temp_list,fn=36)
+                add_element(temp_list,fn=34)
             elif(i==int(rows)-1):
                 add_element(temp_list,fn=32)
             else:
@@ -132,9 +120,6 @@ def increase_strt(stop):
         defs.enemyrelpos-=2
         main_rider.move('s')
         main_rider.move('a',True)
-        if main_rider.check_pos() == 1:
-            print_board(defs.board_start)
-            break
         if stop():
             print("\033[2J",end="")
             _thread.interrupt_main()
@@ -151,7 +136,7 @@ if __name__=="__main__":
     stop_threads = False
     thread1 = threading.Thread(target=increase_strt, daemon=True, args =(lambda : stop_threads, ))
     thread1.start()
-    while True:
+    while defs.dragonlivesleft>=0 and defs.livesleft>=0:
         getch = Get()
         chbuff = input_to(getch)
         if chbuff:
@@ -170,9 +155,4 @@ if __name__=="__main__":
                 main_rider.sheild() 
         elif not main_rider._isSheilded:
             main_rider.change_rider(0)
-        if main_rider.check_pos() == 1:
-            stop_threads = True
-            thread1.join(0)
-            print("\033[2J",end="")
-            print_board(defs.board_start)
-            exit(0)
+        main_rider.check_pos()

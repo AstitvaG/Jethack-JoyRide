@@ -1,5 +1,5 @@
 from random import randint
-import os
+import os,defs
 from defs import block,board_len,rows
 
 def add_element(temp_list=None,cont=-1,fn=-1,bn=-1,r1=0,g1=0,b1=0,bx=-1,r2=0,g2=0,b2=0,element=block,end=""):
@@ -70,5 +70,4 @@ def fill_in_clouds(board,freq,art):
         for i in range(len(art)):
             for j in range(len(art[0])):
                 if art[i][j]==1:
-                    board[starty+i][startx+j]=add_element(fn=37,end="\x1B[36m\x1B[46m")
-                    # print(add_element(fn=37,end="\x1B[36m\x1B[46m"))
+                    board[starty+i][startx+j]=add_element(fn=37,end=defs.bg+defs.fg)

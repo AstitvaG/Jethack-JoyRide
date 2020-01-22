@@ -7,3 +7,12 @@
         ▌     /████/ )\"\████████████████\  
         █\  /███/    ^ ^       \██████████) 
          \███--"                    \██████)
+
+for x in dragon:
+	for y in x:
+		val=''
+		for p in y:
+			if type(p)!=int:
+				val+=p
+		print(val,end=defs.reset_color)
+	print()

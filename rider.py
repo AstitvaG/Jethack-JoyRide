@@ -163,23 +163,26 @@ class Rider:
         for i in self.art_areay:
             for j in self.art_areax:
                 if(j+defs.board_start-1>defs.board_len-1): 
-                    return -1
-                if defs.board_check[i][j+defs.board_start-1]==1 and not self._isSheilded:
-                    return 1
-                elif defs.board_check[i][j+defs.board_start-1]==1:
+                    return
+                if defs.board_check[i][j+defs.board_start-1] in [1,30] and not self._isSheilded:
+                    defs.livesleft-=1
+                    if defs.board_check[i][j+defs.board_start-1]==1:
+                        Bullet.clearArcs(j+defs.board_start-1,i)
+                    return
+                elif defs.board_check[i][j+defs.board_start-1] in [1,30]:
                     self._isSheilded=False
                     Bullet.clearArcs(j+defs.board_start-1,i)
-                    return -1
+                    return
                 if defs.board_check[i][j+defs.board_start] == 2:
                     defs.board_check[i][j+defs.board_start]=0
                     defs.board_check[i][j+defs.board_start-1]=0
                     defs.board_check[i][j+defs.board_start+1]=0
                     defs.coinsCollected+=1
-                    return 2
+                    return
                 if defs.board_check[i][j+defs.board_start] == 5:
                     defs.board_check[i][j+defs.board_start]=0
                     defs.speed/=2
-                    return 5
+                    return
         self.mgcheck_pos(self.art_areax[0]+defs.board_start,self.art_areay[0])
 
     def print_rider(self):
