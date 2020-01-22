@@ -125,8 +125,8 @@ class Rider:
     def move(self,chbuff,x=False,val=-1):
         if chbuff == 'w':
             self.ypos_top -= 4 if (val==-1) else val
-            if self.ypos_top<-1:
-                self.ypos_top=-1
+            if self.ypos_top<1:
+                self.ypos_top=1
             if not self._isSheilded:    
                 self.change_rider(1)
         elif chbuff == 's':
@@ -158,6 +158,8 @@ class Rider:
             self.move('s',val=1)
         if a in [16,18,21,22,26]:
             self.move('w',val=2)
+        if a in range(10,27):
+            defs.down=0
 
     def check_pos(self):
         for i in self.art_areay:

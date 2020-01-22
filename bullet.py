@@ -9,7 +9,8 @@ class Bullet:
     __savetemp = -1
 
     def __init__(self,startx,starty,rangex,back=False,val=9):
-        defs.bulletsFired+=1
+        if not back:
+            defs.bulletsFired+=1
         self.strt_posx=startx
         self.posx=startx
         self.posy=starty

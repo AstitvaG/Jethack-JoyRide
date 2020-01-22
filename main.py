@@ -38,7 +38,7 @@ def print_board(board_start):
             elif defs.board_check[i][j+board_start] in range(10,19):
                 b = magnet.Magnet.fill_in(defs.board_check[i][j+board_start])
                 if b[4]==-1:
-                    val = b[0]+defs.board[i][j+board_start][1]+b[2]+b[3]
+                    val = b[0]+defs.plain_board[i][j+board_start][1]+b[2]+b[3]
                 else:
                     val=b[0]+b[1]+b[2]+b[3]
                 print(val,end="")
@@ -63,10 +63,12 @@ def print_board(board_start):
     print(reset_color,end="",flush=True)
     print("",end="\033[0;0f")
     
-    print(reset_color+str(main_rider.xpos_left)+'/'+defs.columns,\
-        str(main_rider.ypos_top)+'/'+defs.rows+reset_color,\
-        defs.coinsCollected,defs.enemiesKilled,defs.bulletsFired\
-        ,math.floor(time.time()-start_time),defs.livesleft,defs.dragonlivesleft)
+    print(reset_color,"Coins collected :",defs.coinsCollected,\
+        "\tEnemies killed :",defs.enemiesKilled,\
+        "\tBullets fired :",defs.bulletsFired,\
+        "\tTime :",math.floor(time.time()-start_time),\
+        "\tLives :",defs.livesleft,defs.dragonlivesleft,defs.speed)
+
 
 
 
@@ -113,6 +115,7 @@ def create_check():
 
 
 def increase_strt(stop):
+    board_start = time.time()
     while defs.board_start+int(columns)<=board_len and\
     defs.dragonlivesleft>=0 and defs.livesleft>=0:
         print_board(defs.board_start)
@@ -125,6 +128,9 @@ def increase_strt(stop):
         if stop():
             print("\033[2J",end="")
             _thread.interrupt_main()
+        if time.time()-board_start>40:
+            defs.speed=round(defs.speed*0.8,4)
+            board_start=time.time()
 
 if __name__=="__main__":
     main_rider = Rider()
@@ -149,7 +155,8 @@ if __name__=="__main__":
                 exit(0)
             elif chbuff in ['w','a','s','d']:
                 main_rider.move(chbuff)
-                if chbuff=='w': defs.down=0
+                if chbuff=='w': defs.down=1
+                else: defs.down=1
             elif chbuff == 'j':
                 # print(main_rider.xpos_left,main_rider.ypos_top)
                 bullet.Bullet(main_rider.xpos_left+defs.board_start+len(main_rider.rider[0]),\
