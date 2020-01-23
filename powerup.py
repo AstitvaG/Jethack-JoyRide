@@ -1,7 +1,7 @@
 from random import randint
-import defs,objects
+import defs,elements
 
-class Powerup(objects.Objects):
+class Powerup(elements.Elements):
     def __init__(self,freq):
         for i in range(defs.board_len//freq):
             posx = randint(2,freq-2)

@@ -1,5 +1,5 @@
-import defs,threading,time,copy,objects
-class Bullet(objects.Objects):
+import defs,threading,time,copy,elements
+class Bullet(elements.Elements):
     bullet = ['\x1B[30m','','🡆',defs.bg+defs.bg]
     drg_bullet = ['\x1b[38;2;255;165;0m','','█',defs.bg+defs.bg]
     strt_posx=0

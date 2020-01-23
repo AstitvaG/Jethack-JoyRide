@@ -5,15 +5,6 @@ import defs,time,threading
 from bullet import Bullet
 
 
-# def gc(c="\u2588",r=0,g=0,b=0,f=1,e=1,c1="",r1=0,g1=0,b1=0):
-#     ret_str = "\x1b[38;2;"+str(r)+";"+str(g)+";"+str(b)+"m"+str(c)
-#     if f==0:
-#         ret_str = "\x1b[38;2;"+str(r)+";"+str(g)+";"+str(b)+"m"+str(c1)
-#         ret_str += "\x1b[48;2;"+str(r1)+";"+str(g1)+";"+str(b1)+"m"+str(c)
-#     if e==1:
-#         ret_str+=reset_color
-#     return ret_str
-
 class Rider:
     rider = [
              [['', '', ' ', '', -1], ['\x1b[38;2;224;172;172m', '\x1b[48;2;0;0;0m', '▅', '', 1]],
@@ -114,12 +105,12 @@ class Rider:
             self.ypos_top+=1
 
 
-    def __init__(self):
+    def __init__(self,xpos_start=4,ypos_start=int(rows)//2,addx=rider):
         # self.gen_rider()
-        self.xpos_left = 4
-        self.ypos_top = int(rows)//2
-        self.art_areax=range(self.xpos_left,self.xpos_left+len(self.rider[0]))
-        self.art_areay=range(self.ypos_top,self.ypos_top+len(self.rider))
+        self.xpos_left = xpos_start
+        self.ypos_top = ypos_start
+        self.art_areax=range(self.xpos_left,self.xpos_left+len(addx[0]))
+        self.art_areay=range(self.ypos_top,self.ypos_top+len(addx))
         # self.print_rider()
 
     def move(self,chbuff,x=False,val=-1):

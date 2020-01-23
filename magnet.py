@@ -1,4 +1,4 @@
-import defs,objects
+import defs,elements
 from random import randint
 redf="\x1B[31m"
 redb="\x1B[41m"
@@ -6,7 +6,7 @@ greyf='\x1b[38;2;100;100;100m'
 greyb='\x1b[48;2;100;100;100m'
 
 
-class Magnet(objects.Objects):
+class Magnet(elements.Elements):
     magnet = [
         [
             ['','',' ',defs.bg+defs.fg,-1,10],
