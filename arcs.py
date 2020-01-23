@@ -24,132 +24,80 @@ arc_l = [
         ]
 
 
+class Arcs:
+    def fill_in_art(self,board,val,freq,iter):
+        if val==1:
+            starty=randint(1,rows//3-1) #changing
+            startx=randint(1,freq-1)+iter*freq #const
+            for j in range(rows//3):
+                i=0
+                for idx in arc_v:
+                    if idx[4] == -1:
+                        val = [idx[0],board[starty+j][startx+i][1],idx[2],bg+fg]
+                    else:
+                        val = [idx[0],idx[1],idx[2],bg+fg]
+                    
+                    board[starty+j][startx+i]=val
+                    defs.board_check[starty+j][startx+i]=1
+                    i+=1
+        elif val==2:
+            starty=randint(1,rows-3) #const
+            startx=randint(1,freq-1)+iter*freq #const
+            # startx=randint(length*freq,length*(freq+1)-rows-1) #changing
+            for j in range(2*rows//3):
+                i=0
+                for idx in arc_h:
+                    # try:
+                    if idx[4] == -1:
+                        val = [idx[0],board[starty+i][startx+j][1],idx[2],bg+fg]
+                    else:
+                        val = [idx[0],idx[1],idx[2],bg+fg]
+                    board[starty+i][startx+j]=val
+                    defs.board_check[starty+i][startx+j]=1
+                    i+=1
+        elif val==3:
+            starty=randint(1,rows//3-1) #changing
+            startx=randint(1,freq-1)+iter*freq #const
+            # startx=randint(length*freq,length*(freq+1)-1) #const
+            for j in range(rows//3):
+                if j == 0: p = arc_r[0]
+                elif j == rows//3-1: p = arc_r[2]
+                else : p = arc_r[1]
+                i=0
+                for idx in p:
+                    if idx[4] == -1:
+                        val = [idx[0],board[starty+j][startx+i+j][1],idx[2],bg+fg]
+                    else:
+                        val = [idx[0],idx[1],idx[2],bg+fg]
+                    
+                    board[starty+j][startx+i+j]=val
+                    defs.board_check[starty+j][startx+i+j]=1
+                    i+=1
+        else:
+            starty=randint(1,rows//3-1) #changing
+            startx=randint(1,freq-1)+iter*freq #const
+            # startx=randint(length*freq,length*(freq+1)-1) #const
+            for j in range(rows//3-1,-1,-1):
+                if j == 0: p = arc_l[0]
+                elif j == rows//3-1: p = arc_l[2]
+                else : p = arc_l[1]
+                i=0
+                for idx in p:
+                    if idx[4] == -1:
+                        val = [idx[0],board[starty+j][startx+i-j][1],idx[2],bg+fg]
+                    else:
+                        val = [idx[0],idx[1],idx[2],bg+fg]
+                    
+                    board[starty+j][startx+i-j]=val
+                    defs.board_check[starty+j][startx+i-j]=1
+                    i+=1
 
-def fill_in_art(board,val,freq,iter):
-    if val==1:
-        starty=randint(1,rows//3-1) #changing
-        startx=randint(1,freq-1)+iter*freq #const
-        for j in range(rows//3):
-            i=0
-            for idx in arc_v:
-                if idx[4] == -1:
-                    val = [idx[0],board[starty+j][startx+i][1],idx[2],bg+fg]
-                else:
-                    val = [idx[0],idx[1],idx[2],bg+fg]
-                
-                board[starty+j][startx+i]=val
-                defs.board_check[starty+j][startx+i]=1
-                i+=1
-    elif val==2:
-        starty=randint(1,rows-3) #const
-        startx=randint(1,freq-1)+iter*freq #const
-        # startx=randint(length*freq,length*(freq+1)-rows-1) #changing
-        for j in range(2*rows//3):
-            i=0
-            for idx in arc_h:
-                # try:
-                if idx[4] == -1:
-                    val = [idx[0],board[starty+i][startx+j][1],idx[2],bg+fg]
-                else:
-                    val = [idx[0],idx[1],idx[2],bg+fg]
-                board[starty+i][startx+j]=val
-                defs.board_check[starty+i][startx+j]=1
-                i+=1
-    elif val==3:
-        starty=randint(1,rows//3-1) #changing
-        startx=randint(1,freq-1)+iter*freq #const
-        # startx=randint(length*freq,length*(freq+1)-1) #const
-        for j in range(rows//3):
-            if j == 0: p = arc_r[0]
-            elif j == rows//3-1: p = arc_r[2]
-            else : p = arc_r[1]
-            i=0
-            for idx in p:
-                if idx[4] == -1:
-                    val = [idx[0],board[starty+j][startx+i+j][1],idx[2],bg+fg]
-                else:
-                    val = [idx[0],idx[1],idx[2],bg+fg]
-                
-                board[starty+j][startx+i+j]=val
-                defs.board_check[starty+j][startx+i+j]=1
-                i+=1
-    else:
-        starty=randint(1,rows//3-1) #changing
-        startx=randint(1,freq-1)+iter*freq #const
-        # startx=randint(length*freq,length*(freq+1)-1) #const
-        for j in range(rows//3-1,-1,-1):
-            if j == 0: p = arc_l[0]
-            elif j == rows//3-1: p = arc_l[2]
-            else : p = arc_l[1]
-            i=0
-            for idx in p:
-                if idx[4] == -1:
-                    val = [idx[0],board[starty+j][startx+i-j][1],idx[2],bg+fg]
-                else:
-                    val = [idx[0],idx[1],idx[2],bg+fg]
-                
-                board[starty+j][startx+i-j]=val
-                defs.board_check[starty+j][startx+i-j]=1
-                i+=1
-
-def print_arcs():
-    for j in range(rows//2):
-        for i in arc_v:
-            val=""
-            for x in i:
-                if(type(x) != int):
-                    val+=x
-            print(val+reset_color,end="")
-        print()
-    print()
-
-
-    for i in range(len(arc_h)):
-        for j in range(rows):
-            val=""
-            for x in arc_h[i]:
-                if(type(x) != int):
-                    val+=x
-            print(val+reset_color,end="")
-        print()
-    print()
-
-
-
-    for j in range(rows//2):
-        if j>0 and j<rows//2-1: g=1
-        elif j==0: g=0
-        else: g=2
-        val=""
-        for x in arc_r[g]:
-            for p in x:
-                if(type(p) != int):
-                    val+=p
-            val+=reset_color
-        print(' '*j,end="")
-        print(val)
-    print()
-
-    for j in range(rows//2-1,-1,-1):
-        if j>0 and j<rows//2-1: g=1
-        elif j==0: g=2
-        else: g=0
-        val=""
-        for x in arc_l[g]:
-            for p in x:
-                if(type(p) != int):
-                    val+=p
-            val+=reset_color
-        print(' '*j,end="")
-        print(val)
-    print()
-
-def fill_in(freq,board):
-    for i in range(2,defs.board_len//freq):
-        val=random.sample(range(1,5),2)
-        try:
-            fill_in_art(board,val[0],freq+1,i)
-        except:pass
-        try:
-            fill_in_art(board,val[1],freq+1,i)
-        except:pass
+    def __init__(self,freq,board):
+        for i in range(2,defs.board_len//freq):
+            val=random.sample(range(1,5),2)
+            try:
+                self.fill_in_art(board,val[0],freq+1,i)
+            except:pass
+            try:
+                self.fill_in_art(board,val[1],freq+1,i)
+            except:pass

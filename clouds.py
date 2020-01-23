@@ -61,17 +61,18 @@ small_cloud = [[0,0,0,1,1,1,0,0],
                [0,0,1,1,1,1,1,0],
                [1,1,1,1,1,1,1,1]]
 
-def fill_in_clouds(board,freq,art):
-    for p in range(defs.board_len//freq):
-        startx=randint(3,freq-3-len(art[0]))+p*freq
-        starty=randint(3,int(rows)-3-len(art))
-        i=0
-        j=0
-        for i in range(len(art)):
-            for j in range(len(art[0])):
-                if art[i][j]==1:
-                    board[starty+i][startx+j]=add_element(fn=37,end=defs.bg+defs.fg)
+class Clouds:
+    def fill_in_clouds(self,board,freq,art):
+        for p in range(defs.board_len//freq):
+            startx=randint(3,freq-3-len(art[0]))+p*freq
+            starty=randint(3,int(rows)-3-len(art))
+            i=0
+            j=0
+            for i in range(len(art)):
+                for j in range(len(art[0])):
+                    if art[i][j]==1:
+                        board[starty+i][startx+j]=add_element(fn=37,end=defs.bg+defs.fg)
 
-def fill_in(freq,board):
-    fill_in_clouds(board,int(0.4*freq),small_cloud)
-    fill_in_clouds(board,freq,large_cloud)
+    def __init__(self,freq,board):
+        self.fill_in_clouds(board,int(0.4*freq),small_cloud)
+        self.fill_in_clouds(board,freq,large_cloud)

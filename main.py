@@ -105,10 +105,10 @@ def create_board():
         board.append(temp_list)
     defs.board_len-=int(defs.columns)
     #
-    clouds.fill_in(100,board)
+    clouds.Clouds(100,board)
     defs.plain_board=copy.deepcopy(board)
-    arcs.fill_in((2*int(defs.rows)//3+1),board)
-    coins.fill_in(100,board)
+    arcs.Arcs((2*int(defs.rows)//3+1),board)
+    coins.Coins(100,board)
     powerup.Powerup(defs.board_len//5)
     enemy.Enemy(40)
     magnet.Magnet(200,10)
