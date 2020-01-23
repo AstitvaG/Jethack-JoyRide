@@ -1,5 +1,6 @@
 from random import randint, sample
 import defs
+
 col_gf='\x1B[38;2;255;215;0m'
 col_of='\x1b[38;2;255;165;0m'
 col_ob='\x1b[48;2;255;165;0m'

@@ -1,7 +1,7 @@
 from random import randint
-import defs
+import defs,objects
 
-class Enemy:
+class Enemy(objects.Objects):
     
     def __init__(self,freq):
         for i in range(defs.board_len//freq):

@@ -1,7 +1,7 @@
 from random import randint
-import defs
+import defs,objects
 
-class Powerup:
+class Powerup(objects.Objects):
     def __init__(self,freq):
         for i in range(defs.board_len//freq):
             posx = randint(2,freq-2)
@@ -11,7 +11,7 @@ class Powerup:
                 continue
             defs.board_check[posy][posx+i*freq]=5
     @staticmethod
-    def fill_in():
+    def fill_in(val):
         b = ['\x1b[38;2;0;255;0m', '', '█', defs.bg+defs.fg, -1]
         return b
 
@@ -23,5 +23,5 @@ class Powerup:
             return False
     @staticmethod
     def print_f(i,j):
-        b = Powerup.fill_in()
+        b = Powerup.fill_in(1)
         print(b[0]+b[1]+b[2]+b[3],end="")            
