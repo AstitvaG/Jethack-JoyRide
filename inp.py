@@ -1,4 +1,5 @@
 import stats,defs
+
 stats.Stats.create_board()
 def pr_result(valx=1):
     for i in stats.Stats.rangey:

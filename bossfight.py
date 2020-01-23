@@ -3,8 +3,8 @@ from input import input_to, Get
 from clouds import add_element
 
 class BossFight:
-    main_riderf = rider.Rider()
-    main_dragon = dragon.Dragon()
+    __main_riderf = rider.Rider()
+    __main_dragon = dragon.Dragon()
     defs.isbossfight=True
 
     def print_board(self):
@@ -25,34 +25,34 @@ class BossFight:
                                 +stats.Stats.score_board[ix][iy][3]
                         val+=defs.bg+defs.fg
                         print(val,end="")
-                elif (i in self.main_riderf.art_areay) and (j in self.main_riderf.art_areax):
-                    ix=self.main_riderf.art_areay.index(i)
-                    iy=self.main_riderf.art_areax.index(j)
-                    if self.main_riderf.rider[ix][iy][4] == 1:
-                        for x in self.main_riderf.rider[ix][iy]:
+                elif (i in self.__main_riderf.art_areay) and (j in self.__main_riderf.art_areax):
+                    ix=self.__main_riderf.art_areay.index(i)
+                    iy=self.__main_riderf.art_areax.index(j)
+                    if self.__main_riderf.rider[ix][iy][4] == 1:
+                        for x in self.__main_riderf.rider[ix][iy]:
                             if(type(x)!=int):
                                 val+=x
                     else:
-                        val = self.main_riderf.rider[ix][iy][0]\
+                        val = self.__main_riderf.rider[ix][iy][0]\
                                 +defs.board[i][j][1]\
-                                +self.main_riderf.rider[ix][iy][2]\
-                                +self.main_riderf.rider[ix][iy][3]
+                                +self.__main_riderf.rider[ix][iy][2]\
+                                +self.__main_riderf.rider[ix][iy][3]
                     val+=defs.bg+defs.fg
                     print(val,end="")
-                elif (i in self.main_dragon.art_areay) and (j in self.main_dragon.art_areax):
-                    ix=self.main_dragon.art_areay.index(i)
-                    iy=self.main_dragon.art_areax.index(j)
-                    if self.main_dragon.dragon[ix][iy][2]!=' ':
+                elif (i in self.__main_dragon.art_areay) and (j in self.__main_dragon.art_areax):
+                    ix=self.__main_dragon.art_areay.index(i)
+                    iy=self.__main_dragon.art_areax.index(j)
+                    if self.__main_dragon.dragon[ix][iy][2]!=' ':
                         defs.board_check[i][j]=1
-                    if self.main_dragon.dragon[ix][iy][4] == 1:
-                        for x in self.main_dragon.dragon[ix][iy]:
+                    if self.__main_dragon.dragon[ix][iy][4] == 1:
+                        for x in self.__main_dragon.dragon[ix][iy]:
                             if(type(x)!=int):
                                 val+=x
                     else:
-                        val = self.main_dragon.dragon[ix][iy][0]\
+                        val = self.__main_dragon.dragon[ix][iy][0]\
                                 +defs.board[i][j][1]\
-                                +self.main_dragon.dragon[ix][iy][2]\
-                                +self.main_dragon.dragon[ix][iy][3]
+                                +self.__main_dragon.dragon[ix][iy][2]\
+                                +self.__main_dragon.dragon[ix][iy][3]
                     val+=defs.bg+defs.fg
                     print(val,end="")
                 elif defs.board_check[i][j] in [9,30]:
@@ -119,20 +119,20 @@ class BossFight:
         grav_time=time.time()
         while defs.dragonlivesleft>=0 and defs.livesleft>=0:
             defs.board_check = copy.deepcopy(self.create_check())
-            self.main_riderf.move('s',val=defs.down)
-            self.main_dragon.move('s',val=defs.down)
+            self.__main_riderf.move('s',val=defs.down)
+            self.__main_dragon.move('s',val=defs.down)
             if time.time()-grav_time >defs.def_speed:
                 defs.down+=1
                 grav_time=time.time()
             if time.time()-start_time >0.3:
-                bullet.Bullet(self.main_dragon.xpos_left,\
-                    self.main_riderf.ypos_top,2*int(defs.columns),True,30)
-                bullet.Bullet(self.main_dragon.xpos_left-10,\
-                    self.main_riderf.ypos_top,2*int(defs.columns),True,30)
-                bullet.Bullet(self.main_dragon.xpos_left,\
-                    self.main_riderf.ypos_top+1,2*int(defs.columns),True,30)
-                bullet.Bullet(self.main_dragon.xpos_left-10,\
-                    self.main_riderf.ypos_top+1,2*int(defs.columns),True,30)
+                bullet.Bullet(self.__main_dragon.xpos_left,\
+                    self.__main_riderf.ypos_top,2*int(defs.columns),True,30)
+                bullet.Bullet(self.__main_dragon.xpos_left-10,\
+                    self.__main_riderf.ypos_top,2*int(defs.columns),True,30)
+                bullet.Bullet(self.__main_dragon.xpos_left,\
+                    self.__main_riderf.ypos_top+1,2*int(defs.columns),True,30)
+                bullet.Bullet(self.__main_dragon.xpos_left-10,\
+                    self.__main_riderf.ypos_top+1,2*int(defs.columns),True,30)
                 start_time = time.time()
             self.print_board()
             time.sleep(defs.speed)
@@ -143,7 +143,7 @@ class BossFight:
         defs.board_start = 0
         stats.Stats.create_board()
         defs.speed=defs.def_speed
-        self.main_riderf.ypos_top=int(defs.rows)-4
+        self.__main_riderf.ypos_top=int(defs.rows)-4
         thread1 = threading.Thread(target=self.gameplay,daemon=True)
         thread1.start()
         while defs.dragonlivesleft>=0 and defs.livesleft>=0:
@@ -155,20 +155,20 @@ class BossFight:
                 if chbuff =='q':
                     exit(0)
                 elif chbuff in ['w','s']:
-                    self.main_riderf.move(chbuff)
-                    self.main_dragon.move(chbuff)
+                    self.__main_riderf.move(chbuff)
+                    self.__main_dragon.move(chbuff)
                     if chbuff=='w':
                         defs.down=0
                 elif chbuff in ['a','d']:
-                    self.main_riderf.move(chbuff)
+                    self.__main_riderf.move(chbuff)
                 elif chbuff == 'j':
-                    bullet.Bullet(self.main_riderf.xpos_left+len(self.main_riderf.rider[0]),\
-                        self.main_riderf.ypos_top,int(defs.columns))
+                    bullet.Bullet(self.__main_riderf.xpos_left+len(self.__main_riderf.rider[0]),\
+                        self.__main_riderf.ypos_top,int(defs.columns))
                 elif chbuff == ' ':
-                    self.main_riderf.sheild() 
-            elif not self.main_riderf._isSheilded:
-                self.main_riderf.change_rider(0)
-            self.main_riderf.check_pos()
+                    self.__main_riderf.sheild() 
+            elif not self.__main_riderf._isSheilded:
+                self.__main_riderf.change_rider(0)
+            self.__main_riderf.check_pos()
         if defs.livesleft>=0:
             inp.pr_result(1)
         else:

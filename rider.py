@@ -11,23 +11,23 @@ class Rider:
              [['\x1b[38;2;0;0;0m', '', '▉', '', -1],    ['\x1b[38;2;0;0;139m', '', '█', '', -1]],
              [['', '', ' ', '', -1],  ['\x1b[38;2;0;0;0m', '', '▛', '', -1]]
             ]
-    rider_normal = [
+    __rider_normal = [
              [['', '', ' ', '', -1], ['\x1b[38;2;224;172;172m', '\x1b[48;2;0;0;0m', '▅', '', 1]],
              [['\x1b[38;2;0;0;0m', '', '▉', '', -1],    ['\x1b[38;2;0;0;139m', '', '█', '', -1]],
              [['', '', ' ', '', -1],  ['\x1b[38;2;0;0;0m', '', '▛', '', -1]]
             ]
-    rider_fly = [
+    __rider_fly = [
              [['', '', ' ', '', -1], ['\x1b[38;2;224;172;172m', '\x1b[48;2;0;0;0m', '▅', '', 1]],
              [['\x1b[38;2;0;0;0m', '', '▉', '', -1],    ['\x1b[38;2;0;0;139m', '', '█', '', -1]],
              [['\x1b[38;2;252;186;3m', '', '▘', '', -1],  ['\x1b[38;2;0;0;0m', '', '▛', '', -1]]
             ]
-    rider_flyback = [
+    __rider_flyback = [
              [['', '', ' ', '', -1], ['\x1b[38;2;224;172;172m', '\x1b[48;2;0;0;0m', '▅', '', 1]],
              [['\x1b[38;2;0;0;0m', '', '▉', '', -1],    ['\x1b[38;2;0;0;139m', '', '█', '', -1]],
              [['\x1b[38;2;252;186;3m', '', '▘', '', -1],  ['\x1b[38;2;0;0;0m', '', '▜', '', -1]]
             ]
 
-    sheild_rider = [
+    __sheild_rider = [
                 [
                     [col_sf,'','▗','',-1],
                     [col_sf,col_sb,'█','',1],
@@ -60,11 +60,11 @@ class Rider:
                 ],
             ]
     _isSheilded=False
-    _isSheildPossible=True
+    __isSheildPossible=True
     def sheild_toggle(self):
-        self._isSheildPossible=False
+        self.__isSheildPossible=False
         time.sleep(60)
-        self._isSheildPossible=True
+        self.__isSheildPossible=True
     def activate_sheild(self):
         self.change_rider(3)
         self._isSheilded=True
@@ -72,7 +72,7 @@ class Rider:
         self._isSheilded=False
         self.change_rider(0)
     def sheild(self):
-        if self._isSheildPossible:
+        if self.__isSheildPossible:
             thread1 = threading.Thread(target=self.sheild_toggle, daemon=True)
             thread1.start()
             thread2 = threading.Thread(target=self.activate_sheild, daemon=True)
@@ -94,13 +94,13 @@ class Rider:
 
     def change_rider(self,val):
         if val==1:
-            self.rider=self.rider_fly
+            self.rider=self.__rider_fly
         elif val==2:
-            self.rider=self.rider_flyback
+            self.rider=self.__rider_flyback
         elif val==0:
-            self.rider=self.rider_normal
+            self.rider=self.__rider_normal
         elif val==3:
-            self.rider=self.sheild_rider
+            self.rider=self.__sheild_rider
             self.xpos_left+=1
             self.ypos_top+=1
 
@@ -177,21 +177,3 @@ class Rider:
                     defs.speed/=2
                     return
         self.mgcheck_pos(self.art_areax[0]+defs.board_start,self.art_areay[0])
-
-    # @staticmethod
-    # def print_f(i,j):
-    #     ix=defs.main_rider.art_areay.index(i)
-    #     iy=defs.main_rider.art_areax.index(j)
-    #     if defs.main_rider.rider[ix][iy][4] == 1:
-    #         for x in defs.main_rider.rider[ix][iy]:
-    #             if(type(x)!=int):
-    #                 val+=x
-    #     else:
-    #         val = defs.main_rider.rider[ix][iy][0]\
-    #                 +defs.plain_board[i][j+defs.board_start][1]\
-    #                 +defs.main_rider.rider[ix][iy][2]\
-    #                 +defs.main_rider.rider[ix][iy][3]
-    #     val+=defs.bg+defs.fg
-    #     print(val,end="")
-# x = Rider()
-# x.print_rider()

@@ -7,7 +7,7 @@ greyb='\x1b[48;2;100;100;100m'
 
 
 class Magnet(elements.Elements):
-    magnet = [
+    __magnet = [
         [
             ['','',' ',defs.bg+defs.fg,-1,10],
             ['','',' ',defs.bg+defs.fg,-1,10],
@@ -36,24 +36,24 @@ class Magnet(elements.Elements):
 
     def __init__(self,freq,mgrange=3):
         for p in range(defs.board_len//freq):
-            startx = randint(0,freq-1-len(self.magnet[0]))+p*freq
-            starty = randint(1+mgrange,int(defs.rows)-6-len(self.magnet)-mgrange)
+            startx = randint(0,freq-1-len(self.__magnet[0]))+p*freq
+            starty = randint(1+mgrange,int(defs.rows)-6-len(self.__magnet)-mgrange)
 
-            for x in range(startx,startx+len(self.magnet[0])):
-                for y in range(starty,starty+len(self.magnet)):
+            for x in range(startx,startx+len(self.__magnet[0])):
+                for y in range(starty,starty+len(self.__magnet)):
                     if(defs.board_check[y][x]==1):
                         break
                 else:
                     break
             else:
                 continue
-            for x in range(startx,startx+len(self.magnet[0])):
-                for y in range(starty,starty+len(self.magnet)):
-                    defs.board_check[y][x]=self.magnet[y-starty][x-startx][5]
-            centerx = [startx+len(self.magnet[0])//2-1,startx+len(self.magnet[0])//2]
-            centery = starty+len(self.magnet)//2
-            for x in range(startx-mgrange,startx+len(self.magnet[0])+mgrange):
-                for y in range(starty-mgrange,starty+len(self.magnet)+mgrange):
+            for x in range(startx,startx+len(self.__magnet[0])):
+                for y in range(starty,starty+len(self.__magnet)):
+                    defs.board_check[y][x]=self.__magnet[y-starty][x-startx][5]
+            centerx = [startx+len(self.__magnet[0])//2-1,startx+len(self.__magnet[0])//2]
+            centery = starty+len(self.__magnet)//2
+            for x in range(startx-mgrange,startx+len(self.__magnet[0])+mgrange):
+                for y in range(starty-mgrange,starty+len(self.__magnet)+mgrange):
                     try:
                         if defs.board_check[y][x] not in range(10,19) and defs.board_check[y][x]!=1:
                             if x<centerx[0] and y<centery:
@@ -78,23 +78,23 @@ class Magnet(elements.Elements):
     @staticmethod
     def fill_in(val):
         if val==10:
-            return Magnet.magnet[0][0][:5]
+            return Magnet.__magnet[0][0][:5]
         elif val==11:
-            return Magnet.magnet[0][2][:5]
+            return Magnet.__magnet[0][2][:5]
         elif val==12:
-            return Magnet.magnet[0][4][:5]
+            return Magnet.__magnet[0][4][:5]
         elif val==13:
-            return Magnet.magnet[1][0][:5]
+            return Magnet.__magnet[1][0][:5]
         elif val==14:
-            return Magnet.magnet[1][2][:5]
+            return Magnet.__magnet[1][2][:5]
         elif val==15:
-            return Magnet.magnet[1][4][:5]
+            return Magnet.__magnet[1][4][:5]
         elif val==16:
-            return Magnet.magnet[2][0][:5]
+            return Magnet.__magnet[2][0][:5]
         elif val==17:
-            return Magnet.magnet[2][2][:5]
+            return Magnet.__magnet[2][2][:5]
         elif val==18:
-            return Magnet.magnet[2][4][:5]
+            return Magnet.__magnet[2][4][:5]
     
     @staticmethod
     def check_x(i,j):
