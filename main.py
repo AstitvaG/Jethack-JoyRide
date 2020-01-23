@@ -75,7 +75,7 @@ def print_sbValues():
     pos1x = int(defs.columns)//2-(3*stats.valx)//8
     pos1y = 4
     print("",end="\033["+str(pos1y)+";"+str(pos1x)+"f"+stats.wb+stats.bf)
-    print("Lives:",defs.livesleft,end='')
+    print("Lives:\x1B[31m",'❤ '*defs.livesleft,end='       ')
     pos1y+=2
     print("",end="\033["+str(pos1y)+";"+str(pos1x)+"f"+stats.wb+stats.bf)
     print("Time left:",defs.total_time-int(time.time()-defs.start_time),end='  ')
