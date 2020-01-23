@@ -127,12 +127,12 @@ class BossFight:
             if time.time()-start_time >0.3:
                 bullet.Bullet(self.__main_dragon.xpos_left,\
                     self.__main_riderf.ypos_top,2*int(defs.columns),True,30)
-                bullet.Bullet(self.__main_dragon.xpos_left-10,\
+                bullet.Bullet(self.__main_dragon.xpos_left-3,\
                     self.__main_riderf.ypos_top,2*int(defs.columns),True,30)
-                bullet.Bullet(self.__main_dragon.xpos_left,\
+                bullet.Bullet(self.__main_dragon.xpos_left-2,\
                     self.__main_riderf.ypos_top+1,2*int(defs.columns),True,30)
-                bullet.Bullet(self.__main_dragon.xpos_left-10,\
-                    self.__main_riderf.ypos_top+1,2*int(defs.columns),True,30)
+                bullet.Bullet(self.__main_dragon.xpos_left-5,\
+                    self.__main_riderf.ypos_top+2,2*int(defs.columns),True,30)
                 start_time = time.time()
             self.print_board()
             time.sleep(defs.speed)
