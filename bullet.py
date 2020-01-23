@@ -108,7 +108,6 @@ class Bullet(elements.Elements):
             except: pass
         if boss == True:
             defs.dragonlivesleft-=1
-        # pass
 
     @staticmethod
     def fill_in(val):

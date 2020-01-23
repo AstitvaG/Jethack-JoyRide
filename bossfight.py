@@ -150,8 +150,6 @@ class BossFight:
             getch = Get()
             chbuff = input_to(getch)
             if chbuff:
-                # if chbuff !='w':
-                #     defs.down+=1
                 if chbuff =='q':
                     exit(0)
                 elif chbuff in ['w','s']:

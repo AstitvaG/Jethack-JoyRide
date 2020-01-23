@@ -7,7 +7,6 @@ col_ob='\x1b[48;2;255;165;0m'
 
 coin0 = [col_gf,'','\u25D6',defs.fg+defs.bg]
 coin1 = [col_gf,'','\u25D7',defs.fg+defs.bg]
-# print(val+defs.reset_color)
 
 class Coins:
     def __init__(self,freq,board):
@@ -28,5 +27,3 @@ class Coins:
                             defs.board_check[y][x+1]=2
                     except:
                         pass
-            # print(y,pos_x)
-            # exit(0)

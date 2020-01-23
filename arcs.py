@@ -43,11 +43,9 @@ class Arcs:
         elif val==2:
             starty=randint(1,rows-3) #const
             startx=randint(1,freq-1)+iter*freq #const
-            # startx=randint(length*freq,length*(freq+1)-rows-1) #changing
             for j in range(2*rows//3):
                 i=0
                 for idx in arc_h:
-                    # try:
                     if idx[4] == -1:
                         val = [idx[0],board[starty+i][startx+j][1],idx[2],bg+fg]
                     else:
@@ -58,7 +56,6 @@ class Arcs:
         elif val==3:
             starty=randint(1,rows//3-1) #changing
             startx=randint(1,freq-1)+iter*freq #const
-            # startx=randint(length*freq,length*(freq+1)-1) #const
             for j in range(rows//3):
                 if j == 0: p = arc_r[0]
                 elif j == rows//3-1: p = arc_r[2]
@@ -76,7 +73,6 @@ class Arcs:
         else:
             starty=randint(1,rows//3-1) #changing
             startx=randint(1,freq-1)+iter*freq #const
-            # startx=randint(length*freq,length*(freq+1)-1) #const
             for j in range(rows//3-1,-1,-1):
                 if j == 0: p = arc_l[0]
                 elif j == rows//3-1: p = arc_l[2]

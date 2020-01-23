@@ -26,14 +26,3 @@ def pr_result(valx=1):
         print(line,end='')
         i+=1
     print()
-
-
-    # fo = open("win.txt", "r")
-    # lines = fo.readlines()
-    # i=stats.Stats.rangey[0]+1
-    # j=stats.Stats.rangex[0]+stats.valx//2-(len(lines[0])+1)//2
-    # for line in lines:
-    #     print("",end="\033["+str(i)+";"+str(j)+"f"+stats.wb+stats.bf)
-    #     print(line,end='')
-    #     i+=1
-    # print()
