@@ -1,12 +1,13 @@
 # Jet Hack Joyride
 A fun game written in python where you dodge obstacles, collect coins, use sheilds and powerups, and later in game to finally defeat a mighty flame throwing dragon.
  ##### Controls:
+ ```
  `w` to activate jetpack and move up
  `a` to activate jetpack and move back
  `d` to activate jetpack and move front
  `j` to fire bullets
  `" "` or `space` to fire bullets that kill enemies or destroys flame arcs
- 
+ ```
 ###### Rules:
 - When no key is pressed the rider will fall under to\he influence of gravity
 - When sheild is activated, if the rider collides with an arc, shild will be decativated
