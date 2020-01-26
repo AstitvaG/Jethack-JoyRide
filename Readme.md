@@ -6,7 +6,7 @@ A fun game written in python where you dodge obstacles, collect coins, use sheil
  `a` to activate jetpack and move back
  `d` to activate jetpack and move front
  `j` to fire bullets
- `" "` or `space` to fire bullets that kill enemies or destroys flame arcs
+ ` ` or `space` to fire bullets that kill enemies or destroys flame arcs
  ```
 ###### Rules:
 - When no key is pressed the rider will fall under to\he influence of gravity
